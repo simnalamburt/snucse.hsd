@@ -17,6 +17,8 @@ int main(int argc, char** argv)
   // initialize memory
   for (i = 0; i < SIZE; i++)
     *(fpga_bram + i) = (float) (i * 2); 
+  for (i = SIZE; i < SIZE * 2; i++)
+    *(fpga_bram + i) = 0.0f; 
 
   printf("%-10s%-10s\n", "addr", "FPGA(hex)");
   for (i = 0; i < SIZE * 2; i++)
