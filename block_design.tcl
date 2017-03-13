@@ -25,10 +25,9 @@ startgroup
 apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config {Master "/processing_system7_0/M_AXI_GP0" Clk "/processing_system7_0/FCLK_CLK0 (50 MHz)" }  [get_bd_intf_pins axi_bram_ctrl_0/S_AXI]
 apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config {Master "/processing_system7_0/M_AXI_GP0" Clk "/processing_system7_0/FCLK_CLK0 (50 MHz)" }  [get_bd_intf_pins myip_0/S00_AXI]
 endgroup
+set_property range 32K [get_bd_addr_segs {processing_system7_0/Data/SEG_axi_bram_ctrl_0_Mem0}]
 regenerate_bd_layout
 validate_bd_design
 save_bd_design
-make_wrapper -files [get_files /home/ltmin/vivado_prj/zed/hsd2017/lab7/project_2/project_2.srcs/sources_1/bd/design_1/design_1.bd] -top
-add_files -norecurse /home/ltmin/vivado_prj/zed/hsd2017/lab7/project_2/project_2.srcs/sources_1/bd/design_1/hdl/design_1_wrapper.v
 update_compile_order -fileset sources_1
 update_compile_order -fileset sim_1
