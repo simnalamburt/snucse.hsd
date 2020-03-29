@@ -100,4 +100,3 @@ void FPGA::largeMV(const float* large_mat, const float* input, float* output, in
     }
   }
 }
-

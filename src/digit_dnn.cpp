@@ -180,7 +180,7 @@ const float* DigitDNN::run(const float* input)
 
 int DigitDNN::total_block_call()
 {
-    return dev_->num_block_call();
+  return dev_->num_block_call();
 }
 
 FPGA* DigitDNN::getDev(){ return dev_; }
