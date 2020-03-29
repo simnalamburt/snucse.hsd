@@ -9,5 +9,5 @@
 make
 
 # Evaluate
-python2 eval.py
+./eval
 ```
