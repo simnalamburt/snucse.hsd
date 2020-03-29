@@ -1,1 +1,3 @@
 *.pyc
+data/t10k-*
+pretrained_weights/mlp_iter_10000.caffemodel
