@@ -1,7 +1,7 @@
 #ifndef _DIGIT_DNN_H_
 #define _DIGIT_DNN_H_
 #include <string>
-#include <vector> 
+#include <vector>
 #include <memory>
 #include <utility>
 #include <unordered_map>
@@ -22,7 +22,7 @@ private:
   caffe::NetParameter net_;
   caffe::NetParameter net_trained_;
   std::vector<std::unique_ptr<Op> > ops_;
-  std::vector<std::pair<int, int> > op_pair_; // op index to src, dst index pair 
+  std::vector<std::pair<int, int> > op_pair_; // op index to src, dst index pair
 
   std::vector<std::vector<float> > data_;
   std::unordered_map<std::string, int> data_name2idx_;

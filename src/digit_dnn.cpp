@@ -12,7 +12,7 @@ struct MatVecOp:Op
   const float* bias_;
   int input_size_;
   int output_size_;
-  
+
   MatVecOp(FPGA* dev, const float* weight, const float* bias, int input_size, int output_size)
     : dev_(dev), weight_(weight), bias_(bias), input_size_(input_size), output_size_(output_size){}
 
@@ -88,16 +88,16 @@ int DigitDNN::getDataIdx(std::string name)
 {
   if(data_name2idx_.find(name) != data_name2idx_.end())
   {
-    return data_name2idx_[name];    
+    return data_name2idx_[name];
   }
   else
   {
-    return -1;    
+    return -1;
   }
 }
 
 DigitDNN::DigitDNN(std::string model, FPGA* dev):dev_(dev)
-{  
+{
   {
     std::fstream input(model.c_str(), std::ios::in | std::ios::binary);
     if(!net_.ParseFromIstream(&input))
@@ -126,9 +126,9 @@ DigitDNN::DigitDNN(std::string model, FPGA* dev):dev_(dev)
       int input_size = data_[in_idx].size();
 
       int output_size = net_.layer(i).inner_product_param().num_output();
-      int out_idx = regDataIdx(output, output_size);      
+      int out_idx = regDataIdx(output, output_size);
 
-      // append new op 
+      // append new op
       ops_.push_back(std::move(std::unique_ptr<Op>(new MatVecOp(dev_, weight, bias, input_size, output_size))));
       op_pair_.push_back({in_idx, out_idx});
     }
@@ -141,7 +141,7 @@ DigitDNN::DigitDNN(std::string model, FPGA* dev):dev_(dev)
       int input_size = data_[in_idx].size();
 
       int output_size = input_size;
-      int out_idx = regDataIdx(output, output_size);   
+      int out_idx = regDataIdx(output, output_size);
 
       ops_.push_back(std::move(std::unique_ptr<Op>(new ReLUOp(input_size))));
       op_pair_.push_back({in_idx, out_idx});
@@ -155,7 +155,7 @@ DigitDNN::DigitDNN(std::string model, FPGA* dev):dev_(dev)
       int input_size = data_[in_idx].size();
 
       int output_size = input_size;
-      int out_idx = regDataIdx(output, output_size);   
+      int out_idx = regDataIdx(output, output_size);
 
       ops_.push_back(std::move(std::unique_ptr<Op>(new SoftmaxOp(input_size))));
       op_pair_.push_back({in_idx, out_idx});
@@ -175,7 +175,7 @@ const float* DigitDNN::run(const float* input)
     ops_[i]->run(data_[pair.first].data(), data_[pair.second].data());
   }
 
-  return data_[output_idx_].data();  
+  return data_[output_idx_].data();
 }
 
 int DigitDNN::total_block_call()

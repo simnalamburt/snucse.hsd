@@ -12,7 +12,7 @@ FPGA::FPGA(off_t data_addr, off_t output_addr, int m_size, int v_size)
 	num_block_call_ = 0;
 
 	output_ = new unsigned int[m_size_];    // use output_ as tempolar output
-        data_ = new float[data_size_];	
+        data_ = new float[data_size_];
 }
 
 FPGA::~FPGA()
@@ -47,7 +47,7 @@ const float* FPGA::blockMV()
 
 	float* vec = this->vector();
 	float* mat = this->matrix();
-	float* out  = reinterpret_cast<float*>(output_);  
+	float* out  = reinterpret_cast<float*>(output_);
 
 	for(int i = 0; i < m_size_; ++i)
 	{
@@ -61,7 +61,7 @@ const float* FPGA::blockMV()
 		data_[i] = out[i];
 	}
 
-	return data_;    
+	return data_;
 }
 
 void FPGA::largeMV(const float* large_mat, const float* input, float* output, int num_input, int num_output)
@@ -69,7 +69,7 @@ void FPGA::largeMV(const float* large_mat, const float* input, float* output, in
 	float* vec = this->vector();
 	float* mat = this->matrix();
 
-	// 0) Initialize output vector		
+	// 0) Initialize output vector
 	for(int i = 0; i < num_output; ++i)
 	{
 		output[i] = 0;
@@ -78,8 +78,8 @@ void FPGA::largeMV(const float* large_mat, const float* input, float* output, in
 	for(int i = 0; i < num_output; i += m_size_)
 	{
 		for(int j = 0; j < num_input; j += v_size_)
-		{			
-			// 0) Initialize input vector		
+		{
+			// 0) Initialize input vector
 			int block_row = min(m_size_, num_output-i);
 			int block_col = min(v_size_, num_input-j);
 
@@ -97,7 +97,7 @@ void FPGA::largeMV(const float* large_mat, const float* input, float* output, in
 			{
 				output[i + row] += ret[row];
 			}
-		} 
+		}
 	}
 }
 

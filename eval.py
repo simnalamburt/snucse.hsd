@@ -30,7 +30,7 @@ class MLP(object):
 
   def __del__(self):
     self.lib.delNet(self.net)
-  
+
   def inference(self, input):
     self.lib.inference(self.net, input.ctypes.data, self.output.ctypes.data, self.total_num_call.ctypes.data)
     return self.output
@@ -43,13 +43,13 @@ if __name__ == "__main__":
   images = images.astype(np.float32)
   images = images/255.
   print("images", images.shape)
-  
-  print("create network...")		
+
+  print("create network...")
   model_path = os.path.join("./pretrained_weights", "mlp_iter_10000.caffemodel")
   net = MLP(model_path, m_size=M_SIZE, v_size=V_SIZE)
   test_images = [images[i, :, :].copy() for i in xrange(NUM_TEST_IMAGES)]
-  
-  print("run test...")		
+
+  print("run test...")
   n_correct = 0
   start_time = time.time()
   for i in xrange(NUM_TEST_IMAGES):
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     label = labels[i,]
 
     n_correct += (label == prediction)
-  
+
   model_stats = {
     "total_time": time.time()-start_time,
     "total_image": NUM_TEST_IMAGES,

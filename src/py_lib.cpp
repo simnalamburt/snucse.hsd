@@ -16,7 +16,7 @@ void delNet(void* net_ptr)
 {
   DigitDNN* net = static_cast<DigitDNN*>(net_ptr);
   FPGA* dev = net->getDev();
-  
+
   delete net;
   delete dev;
 }

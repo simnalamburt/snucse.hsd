@@ -12,7 +12,7 @@ class FPGA
 {
 
 private:
-  int fd_;	
+  int fd_;
   float* data_;
   unsigned int* output_;
 
@@ -20,20 +20,20 @@ private:
   int v_size_;
   int data_size_;
   int num_block_call_;
-	
+
 public:
   FPGA(off_t data_addr, off_t output_addr, int m_size, int v_size);
   ~FPGA();
-      
+
   // return internal pointer for the data
   float* matrix(void);
   float* vector(void);
   void reset(void);
   int num_block_call(void);
-      
+
   // perform matrix multiplication and return output array pointer
-  const float* blockMV();	
-      
+  const float* blockMV();
+
   // Input vector size: num_input
   // Matrix size: num_output * num_input
   // Output vector size: num_output
@@ -43,4 +43,3 @@ public:
 };
 
 #endif
-
