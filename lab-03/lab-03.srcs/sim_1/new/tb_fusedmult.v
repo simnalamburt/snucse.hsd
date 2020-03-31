@@ -20,7 +20,6 @@ module tb_fusedmult();
 
     // Expected output
     reg [2*BITWIDTH-1:0] dout_expected;
-    initial dout_expected = 0;
     always @(posedge clk) dout_expected = en == 0 ? 0 : dout_expected + ain * bin;
 
     // If is_ok is true, my_adder is working fine.

@@ -10,7 +10,6 @@ module my_fusedmult #(
     output [2*BITWIDTH-1:0] dout
 );
     reg [2*BITWIDTH-1:0] accum;
-    initial accum = 0;
 
     wire [2*BITWIDTH-1:0] multiplied;
     my_mul #(BITWIDTH) multiplier(
