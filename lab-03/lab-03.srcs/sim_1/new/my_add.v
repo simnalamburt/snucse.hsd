@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module my_add #(
     parameter BITWIDTH = 32
 ) (
