@@ -88,3 +88,5 @@
 # Ignore automatically generated files
 /lab-03.sim/
 /lab-03.ip_user_files/
+# Do not ignore report
+!/report/*
