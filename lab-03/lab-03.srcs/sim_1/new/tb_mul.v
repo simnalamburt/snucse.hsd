@@ -33,7 +33,7 @@ module tb_mul();
             #10;
         end
         // Test big random numbers
-        for (i = 0; i < 20; i = i + 1) begin
+        for (i = 0; i < 30; i = i + 1) begin
             // Use range [0, 2**32)
             ain = $urandom;
             bin = $urandom;
