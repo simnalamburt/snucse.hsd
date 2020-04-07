@@ -86,7 +86,9 @@
 
 
 # Ignore automatically generated files
+/.Xil/
 /lab-04.sim/
+/lab-04.runs/
 /lab-04.ip_user_files/
 # Do not ignore report
 !/report/*
