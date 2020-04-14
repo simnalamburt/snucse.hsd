@@ -17,15 +17,6 @@ module my_bram #(
     // BRAM Internal Storage
     reg [31:0] mem[0:(1<<(BRAM_ADDR_WIDTH-2))-1];
 
-    // Each external address of which size is 15 bits (i.e., BRAM_ADDR) is
-    // associated with 1 byte of data. Last two bits are masked and assigned to
-    // internal address of which size is 13 bits (i.e., addr). It is associated
-    // with each entry of mem(i.e. it is associated with 4 bytes of data).
-    wire [BRAM_ADDR_WIDTH-3:0] addr = BRAM_ADDR[BRAM_ADDR_WIDTH-1:2];
-
-    // TODO
-    reg [31:0] dout;
-
     // code for reading & writing
     integer file;
     initial begin
@@ -41,6 +32,25 @@ module my_bram #(
         end
     end
 
+    // Each external address of which size is 15 bits (i.e., BRAM_ADDR) is
+    // associated with 1 byte of data. Last two bits are masked and assigned to
+    // internal address of which size is 13 bits (i.e., addr). It is associated
+    // with each entry of mem(i.e. it is associated with 4 bytes of data).
+    wire [BRAM_ADDR_WIDTH-3:0] addr = BRAM_ADDR[BRAM_ADDR_WIDTH-1:2];
+
+    // Read Queue of length 2. Oldest: 0, Newest: 1
+    //
+    // BRAM costs 2 cycles for read (i.e., BRAM returns value after
+    // next cycle when you assign address to read data)
+    reg [31:0] read_q[0:1];
+
+    // Write Queue of length 1
+    //
+    // BRAM costs 1 cycle for write
+    reg [3:0] write_q_enable;
+    reg [BRAM_ADDR_WIDTH-3:0] write_q_addr;
+    reg [7:0] write_q_part[0:3];
+
     // code for BRAM implementation
     always @(posedge BRAM_CLK) begin
         // BRAM_RST == 1, BRAM_RDDATA should print 0
@@ -48,24 +58,29 @@ module my_bram #(
             BRAM_RDDATA = 0;
         end
 
-        if (BRAM_EN == 0) begin
-            // BRAM_EN == 0, do nothing
-        end else begin
-            // BRAM_EN == 1, BRAM is available for read or write
+        // Process delayed read: Read mem[addr] into BRAM_RDDATA
+        BRAM_RDDATA = read_q[0];
+        // Process delayed write: Store given data into mem
+        if (write_q_enable[0] == 1) mem[write_q_addr][8*1 - 1:8*0] = write_q_part[0];
+        if (write_q_enable[1] == 1) mem[write_q_addr][8*2 - 1:8*1] = write_q_part[1];
+        if (write_q_enable[2] == 1) mem[write_q_addr][8*3 - 1:8*2] = write_q_part[2];
+        if (write_q_enable[3] == 1) mem[write_q_addr][8*4 - 1:8*3] = write_q_part[3];
+
+        // Advance read queue
+        read_q[0] = read_q[1];
+        // Advance write queue (nothing to do)
+
+        // Enqueue new command if BRAM_EN is true
+        if (BRAM_EN) begin
             if (BRAM_WE == 0) begin
-                // Read mem[addr] into BRAM_RDDATA
-                BRAM_RDDATA = mem[addr];
-
-                // TODO: BRAM costs 2 cycles for read (i.e., BRAM returns value
-                // after next cycle when you assign address to read data)
+                read_q[1] = mem[addr];
             end else begin
-                // BRAM_WE[i] == 1, store given data into mem
-                if (BRAM_WE[0] == 1) mem[addr][8*(0+1)-1:8*0] = BRAM_WRDATA[8*(0+1)-1:8*0];
-                if (BRAM_WE[1] == 1) mem[addr][8*(1+1)-1:8*1] = BRAM_WRDATA[8*(1+1)-1:8*1];
-                if (BRAM_WE[2] == 1) mem[addr][8*(2+1)-1:8*2] = BRAM_WRDATA[8*(2+1)-1:8*2];
-                if (BRAM_WE[3] == 1) mem[addr][8*(3+1)-1:8*3] = BRAM_WRDATA[8*(3+1)-1:8*3];
-
-                // TODO: BRAM costs 1 cycle for write
+                write_q_enable = BRAM_WE;
+                write_q_addr = addr;
+                write_q_part[0] = BRAM_WRDATA[8*1 - 1:8*0];
+                write_q_part[1] = BRAM_WRDATA[8*2 - 1:8*1];
+                write_q_part[2] = BRAM_WRDATA[8*3 - 1:8*2];
+                write_q_part[3] = BRAM_WRDATA[8*4 - 1:8*3];
             end
         end
     end
