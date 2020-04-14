@@ -20,6 +20,7 @@ module my_bram_test();
         .BRAM_WE(4'b0000),
         .done(done1)
     );
+    defparam BRAM1.OUT_FILE = "output1.txt";
 
     reg [14:0] addr2;
     reg en2, done2;
@@ -34,6 +35,8 @@ module my_bram_test();
         .BRAM_WE(4'b1111),
         .done(done2)
     );
+    defparam BRAM2.INIT_FILE = "";
+    defparam BRAM2.OUT_FILE = "output2.txt";
 
     initial begin
         en1 = 1;
