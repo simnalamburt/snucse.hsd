@@ -8,7 +8,7 @@ module my_pe_test();
 
     parameter RAM_SIZE = 4;
     reg reset;
-    reg [31:0] ain, din;
+    reg [31:0] float_in;
     reg [RAM_SIZE-1:0] addr;
     reg we;
     reg valid;
@@ -18,8 +18,8 @@ module my_pe_test();
     my_pe UUT(
         .aclk(clk),
         .aresetn(~reset),
-        .ain(ain),
-        .din(din),
+        .ain(float_in),
+        .din(float_in),
         .addr(addr),
         .we(we),
         .valid(valid),
@@ -31,8 +31,7 @@ module my_pe_test();
     integer i;
     initial begin
         reset = 1;
-        ain = 0;
-        din = 0;
+        float_in = 0;
         addr = 0;
         we = 0;
         valid = 0;
@@ -42,22 +41,26 @@ module my_pe_test();
         reset = 0;
         we = 1;
         for (i = 0; i < 16; i = i + 1) begin
-            din = $urandom;
-            din = {7'b0100000, din[24:0]};
+            float_in = $urandom;
+            float_in = {7'b0100000, float_in[24:0]};
             addr = i;
             #10;
         end
+        float_in = 0;
+        addr = 0;
         we = 0;
 
         #30;
 
         for (i = 0; i < 16; i = i + 1) begin
-            ain = $urandom;
-            ain = {7'b0100000, ain[24:0]};
-            addr = 0;
+            float_in = $urandom;
+            float_in = {7'b0100000, float_in[24:0]};
+            addr = i;
             valid = 1;
             #10;
 
+            float_in = 0;
+            addr = 0;
             valid = 0;
             wait (dvalid);
             #5;
