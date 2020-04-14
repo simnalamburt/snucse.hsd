@@ -46,7 +46,7 @@ module my_pe #(
         .s_axis_c_tvalid(valid),
         .s_axis_c_tdata(psum),
         .m_axis_result_tvalid(dvalid),
-        .m_axis_result_tdata(psum)
+        .m_axis_result_tdata(dout)
     );
 
     always @(posedge aclk) begin
@@ -58,7 +58,9 @@ module my_pe #(
         if (aresetn == 0) begin
             psum = 0;
         end
-    end
 
-    assign dout = psum;
+        if (dvalid) begin
+            psum = psum + dout;
+        end
+    end
 endmodule
