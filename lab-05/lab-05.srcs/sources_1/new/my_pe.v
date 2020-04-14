@@ -32,10 +32,13 @@ module my_pe #(
     (* ram_style = "block" *) reg [31:0] peram[0:2**L_RAM_SIZE - 1];
 
     // psum
+    wire result_valid;
     wire [31:0] result;
-    reg [31:0] psum;
+    reg [31:0] psum, psum_view;
+    reg pvalid;
     initial psum = 0;
-    assign dout = psum;
+    assign dout = psum_view;
+    assign dvalid = pvalid;
 
     // A*B + C
     floating_point_0 FMA(
@@ -47,7 +50,7 @@ module my_pe #(
         .s_axis_b_tdata(peram[addr]),
         .s_axis_c_tvalid(valid),
         .s_axis_c_tdata(psum),
-        .m_axis_result_tvalid(dvalid),
+        .m_axis_result_tvalid(result_valid),
         .m_axis_result_tdata(result)
     );
 
@@ -59,13 +62,19 @@ module my_pe #(
 
         if (aresetn == 0) begin
             psum = 0;
+            pvalid = 0;
         end
     end
 
     always @(negedge aclk) begin
-        if (dvalid) begin
+        if (result_valid) begin
             // Accumulate
             psum = result;
+            psum_view = psum;
+            pvalid = 1;
+        end else begin
+            psum_view = 0;
+            pvalid = 0;
         end
     end
 endmodule

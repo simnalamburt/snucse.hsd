@@ -63,7 +63,7 @@ module my_pe_test();
             addr = 0;
             valid = 0;
             wait (dvalid);
-            #5;
+            #10;
         end
 
         $finish;
