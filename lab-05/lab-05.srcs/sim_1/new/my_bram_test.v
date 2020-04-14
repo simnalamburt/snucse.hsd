@@ -9,7 +9,7 @@ module my_bram_test();
     parameter BRAM_ADDR_WIDTH = 7;
 
     integer addr1;
-    reg en1, done1;
+    reg en1, done1, rst1;
     wire [31:0] result1;
 
     my_bram BRAM1(
@@ -18,7 +18,7 @@ module my_bram_test();
         .BRAM_WRDATA(0),
         .BRAM_RDDATA(result1),
         .BRAM_EN(en1),
-        .BRAM_RST(1'b0),
+        .BRAM_RST(rst1),
         .BRAM_WE(4'b0000),
         .done(done1)
     );
@@ -26,7 +26,7 @@ module my_bram_test();
     defparam BRAM1.OUT_FILE = "output1.txt";
 
     integer addr2;
-    reg en2, done2;
+    reg en2, done2, rst2;
     reg [31:0] input2;
 
     my_bram BRAM2(
@@ -35,7 +35,7 @@ module my_bram_test();
         .BRAM_WRDATA(input2),
         //.BRAM_RDDATA(),
         .BRAM_EN(en2),
-        .BRAM_RST(1'b0),
+        .BRAM_RST(rst2),
         .BRAM_WE(4'b1111),
         .done(done2)
     );
@@ -46,10 +46,12 @@ module my_bram_test();
     initial begin
         en1 = 1;
         done1 = 0;
+        rst1 = 0;
         for (addr1 = 0; addr1 < (1 << BRAM_ADDR_WIDTH); addr1 = addr1 + 4) begin
             #10; // Pass 1 cycle
         end
         en1 = 0;
+        rst1 = 1;
         #20; // Pass 2 cycle
         done1 = 1;
     end
@@ -61,12 +63,15 @@ module my_bram_test();
     initial begin
         en2 = 0;
         done2 = 0;
+        rst2 = 1;
         #30; // Pass 3 cycle
         en2 = 1;
+        rst2 = 0;
         for (addr2 = 0; addr2 < (1 << BRAM_ADDR_WIDTH); addr2 = addr2 + 4) begin
             #10; // Pass 1 cycle
         end
         en2 = 0;
+        rst2 = 1;
         #10; // Pass 1 cycle
         done2 = 1;
 
