@@ -27,7 +27,7 @@ def main(args):
   images = images.astype(np.float32)
   images = images/255.
   print('[*] The shape of image: %s' % str(images.shape))
-  
+
 
   print('[*] Load the network...')
   if args.network == 'mlp': # Lab 2
@@ -40,7 +40,7 @@ def main(args):
     raise
 
 
-  print('[*] Run tests...')		
+  print('[*] Run tests...')
   test_images = [images[i, :, :].copy() for i in xrange(num_test_images)]
   n_correct = 0
   start_time = time.time()
@@ -54,9 +54,9 @@ def main(args):
     label = labels[i,]
 
     n_correct += (label == prediction)
-  
 
-  print('[*] Statistics...')		
+
+  print('[*] Statistics...')
   model_stats = {
     'total_time': time.time()-start_time,
     'total_image': num_test_images,
