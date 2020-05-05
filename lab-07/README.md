@@ -10,4 +10,5 @@ make
 
 # Evaluate
 ./eval
+./benchmark
 ```
