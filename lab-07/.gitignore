@@ -1,0 +1,10 @@
+# Downloaded Data
+/data/t10k-*
+/pretrained_weights/mlp_iter_10000.caffemodel
+/pretrained_weights/cnn_weights.txt*
+
+# Build results
+*.pyc
+/build/*.o
+/build/*.so
+/proto/caffe.pb.*
