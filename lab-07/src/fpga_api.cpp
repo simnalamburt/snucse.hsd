@@ -117,9 +117,9 @@ void FPGA::convLowering(const std::vector<std::vector<std::vector<std::vector<fl
    * Arguments:
    *
    * conv_weights: [conv_channel, input_channel, conv_height, conv_width]
-   * new_weights: [?, ?]
+   * new_weights: [conv_channel, input_channel*conv_height*conv_width]
    * inputs: [input_channel, input_height, input_width]
-   * new_inputs: [?, ?]
+   * new_inputs: [input_channel*conv_height*conv_width, (input_height-conv_height+1)*(input_width-conv_width+1)]
    *
    */
 
@@ -131,8 +131,27 @@ void FPGA::convLowering(const std::vector<std::vector<std::vector<std::vector<fl
   int input_height = inputs[0].size();
   int input_width = inputs[0][0].size();
 
-  // IMPLEMENT THIS
-  // For example,
-  // new_weights[0][0] = cnn_weights[0][0][0][0];
-  // new_inputs[0][0] = inputs[0][0][0];
+  for (int row = 0; row < conv_channel; ++row) {
+    for (int z = 0; z < input_channel; ++z) {
+      for (int y = 0; y < conv_height; ++y) {
+        for (int x = 0; x < conv_width; ++x) {
+          new_weights[row][z*conv_height*conv_width + y*conv_width + x] = cnn_weights[row][z][y][x];
+        }
+      }
+    }
+  }
+
+  const int row_count = input_height - conv_height + 1;
+  const int col_count = input_width - conv_width + 1;
+  for (int z = 0; z < input_channel; ++z) {
+    for (int y = 0; y < conv_height; ++y) {
+      for (int x = 0; x < conv_width; ++x) {
+        for (int offset_y = 0; offset_y < row_count; ++offset_y) {
+          for (int offset_x = 0; offset_x < col_count; ++offset_x) {
+            new_inputs[z*conv_height*conv_width + y*conv_width + x][offset_y*col_count + offset_x] = inputs[z][offset_y + y][offset_x + x];
+          }
+        }
+      }
+    }
+  }
 }
