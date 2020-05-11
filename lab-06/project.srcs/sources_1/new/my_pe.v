@@ -26,22 +26,15 @@ module my_pe #(
 
     // computation result
     // dvalid == 1, result data from MAC is valid
-    output dvalid,
-    output [31:0] dout
+    output reg dvalid,
+    output reg [31:0] dout
 );
     // local register
     (* ram_style = "block" *) reg [31:0] peram[0:2**L_RAM_SIZE - 1];
 
-    // psum
-    wire result_valid;
-    wire [31:0] result;
-    reg [31:0] psum, psum_view;
-    reg pvalid;
-    initial psum = 0;
-    assign dout = psum_view;
-    assign dvalid = pvalid;
-
-    // A*B + C
+    // FMA (A*B + C)
+    wire fma_result_valid;
+    wire [31:0] fma_result;
     floating_point_0 FMA(
         .aclk(aclk),
         .aresetn(aresetn),
@@ -50,32 +43,23 @@ module my_pe #(
         .s_axis_b_tvalid(valid),
         .s_axis_b_tdata(peram[addr]),
         .s_axis_c_tvalid(valid),
-        .s_axis_c_tdata(psum),
-        .m_axis_result_tvalid(result_valid),
-        .m_axis_result_tdata(result)
+        .s_axis_c_tdata(dout),
+        .m_axis_result_tvalid(fma_result_valid),
+        .m_axis_result_tdata(fma_result)
     );
 
     always @(posedge aclk) begin
-        if (we) begin
+        if (!aresetn) begin
+            dout = 0;
+            dvalid = 0;
+        end else if (we) begin
             // we == 1, `din` is stored to `peram[addr]`
             peram[addr] = din;
-        end
-
-        if (aresetn == 0) begin
-            psum = 0;
-            pvalid = 0;
         end
     end
 
     always @(negedge aclk) begin
-        if (result_valid) begin
-            // Accumulate
-            psum = result;
-            psum_view = psum;
-            pvalid = 1;
-        end else begin
-            psum_view = 0;
-            pvalid = 0;
-        end
+        dout = fma_result_valid ? fma_result : dout;
+        dvalid = fma_result_valid;
     end
 endmodule
