@@ -1,26 +1,26 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 05/11/2020 09:33:53 PM
-// Design Name: 
-// Module Name: my_pectl
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module my_pectl(
-
+    input start,
+    input reset,
+    input clk,
+    // TODO
+    input rddata,
+    // TODO
+    output rdaddr,
+    // TODO
+    output out
+);
+    // TODO
+    my_pe PE(
+        .aclk(0),
+        .aresetn(0),
+        .ain(0),
+        .din(0),
+        .addr(0),
+        .we(0),
+        .valid(0),
+        .dvalid(0),
+        .dout(0)
     );
 endmodule
