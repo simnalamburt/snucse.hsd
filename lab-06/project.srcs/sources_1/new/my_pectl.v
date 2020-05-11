@@ -13,7 +13,6 @@ module my_pectl #(
     input aclk,
 
     // Negetive reset. aresetn == 0 means that reset is activated
-    // TODO: aresetn = 0 으로 한다고 pe와 pectl 안에있는 state가 모두 초기화되지 않음
     input aresetn,
 
     // On S_LOAD state, rddata will be stored into peram and global_bram
@@ -34,7 +33,8 @@ module my_pectl #(
     reg [31:0] pe_ain, pe_din;
     reg [L_RAM_SIZE-1:0] pe_addr;
     reg pe_we, pe_valid;
-    wire pe_dvalid, pe_dout; // TODO: use this
+    wire pe_dvalid;
+    wire [31:0] pe_dout;
     my_pe PE(
         .aclk(~aclk), // NOTE: Clock has been negated to avoid timing issue
         .aresetn(aresetn),
@@ -48,99 +48,118 @@ module my_pectl #(
     );
     defparam PE.L_RAM_SIZE = L_RAM_SIZE;
 
+    // pe_ready: Is PE ready for next MAC input?
+    reg pe_ready;
+    always @(negedge aclk) begin
+        pe_ready = pe_dvalid;
+    end
+
+
     //
     // Global BRAM
     //
     (* ram_style = "block" *) reg [31:0] global_bram[0:2**L_RAM_SIZE - 1];
 
+
     //
     // FSM
     //
-    // S_IDLE: state == 0
-    // S_LOAD: 1 <= state < 1 + (1<<(L_RAM_SIZE+1))
-    // S_CALC: 1 + (1<<(L_RAM_SIZE+1)) <= state < 1 + (1<<(L_RAM_SIZE+1)) + (1<<(L_RAM_SIZE))
-    // S_DONE: otherwise
+    reg [L_RAM_SIZE+2:0] state;
+    // S_IDLE               : state == 0
+    // S_LOAD (peram)       : 1 <= state < 1 + (1<<L_RAM_SIZE)
+    //                        counter = state - 1
+    // S_LOAD (global_dram) : 1 + (1<<L_RAM_SIZE) <= state < 1 + (1<<(L_RAM_SIZE+1))
+    //                        counter = state - (1 + (1<<L_RAM_SIZE))
+    // S_CALC               : 1 + (1<<(L_RAM_SIZE+1)) <= state < 1 + (1<<(L_RAM_SIZE+2))
+    //                        counter = (state - (1 + (1<<(L_RAM_SIZE+1))))>>1
+    // TODO
+    // S_DONE               : otherwise
+    localparam S_LOAD_peram_bound = 1 + (1<<L_RAM_SIZE);
+    localparam S_LOAD_global_dram_bound = 1 + (1<<(L_RAM_SIZE+1));
+    localparam S_CALC_bound = 1 + (1<<(L_RAM_SIZE+2));
+
+
     //
-    reg [L_RAM_SIZE+1:0] state;
-    wire [L_RAM_SIZE+1:0] next_state;
-    assign next_state = next(state, aresetn, start);
-    function [L_RAM_SIZE+1:0] next(input [L_RAM_SIZE+1:0] state, input aresetn, start);
+    // Next state
+    //
+    wire [L_RAM_SIZE+2:0] next_state;
+    assign next_state = next(state, aresetn, start, pe_ready);
+    function [L_RAM_SIZE+2:0] next(input [L_RAM_SIZE+2:0] state, input aresetn, start, pe_ready);
         if (!aresetn) begin
             next = 0;
         end else begin
             if (state == 0) begin
                 // S_IDLE
                 next = start;
-            end else if (state < 1 + (1<<(L_RAM_SIZE+1))) begin
+
+            end else if (state < S_LOAD_global_dram_bound) begin
                 // S_LOAD
-                next = next + 1;
-            end else if (state < 1 + (1<<(L_RAM_SIZE+1)) + (1<<(L_RAM_SIZE))) begin
+                next = state + 1;
+
+            end else if (state < S_CALC_bound) begin
                 // S_CALC
-                // TODO
-                next = next;
+                if (!((state - S_LOAD_global_dram_bound)&1)) begin
+                    // Go to the wait state
+                    next = state + 1;
+                end else begin
+                    // Finish wait only at pe_ready
+                    next = state + pe_ready;
+                end
+
             end else begin
                 // S_DONE
                 // TODO
-                next = next;
+                next = state;
+
             end
         end
     endfunction
 
+
+    //
+    // Output (rising edge)
+    //
     always @(posedge aclk) begin
         // Advance state
         state = next_state;
 
-        // TODO: comb logic으로 떼기
         if (state == 0) begin
             // S_IDLE: Do nothing
             pe_we = 0;
             pe_valid = 0;
 
-        end else if (state < 1 + (1<<L_RAM_SIZE)) begin
+        end else if (state < S_LOAD_peram_bound) begin
             // S_LOAD, store data into peram
             pe_din = rddata;
             pe_addr = state - 1;
             pe_we = 1;
             pe_valid = 0;
 
-        end else if (state < 1 + (1<<(L_RAM_SIZE+1))) begin
+        end else if (state < S_LOAD_global_dram_bound) begin
             // S_LOAD, store data into global_bram
             pe_we = 0;
             pe_valid = 0;
 
-            global_bram[state - (1 + (1<<L_RAM_SIZE))] = rddata;
+            global_bram[state - S_LOAD_peram_bound] = rddata;
 
-        end else if (state < 1 + (1<<(L_RAM_SIZE+1)) + (1<<(L_RAM_SIZE))) begin
+        end else if (state < S_CALC_bound) begin
             // S_CALC
-            // TODO: 1. ON RISING EDGE: 데이터 받아서 PE에 선입력시키기
-            if (0) begin
-                pe_ain = global_bram[state - (1 + (1<<(L_RAM_SIZE+1)))];
-                pe_addr = state - (1 + (1<<(L_RAM_SIZE+1)));
+            if (!((state - S_LOAD_global_dram_bound)&1)) begin
+                // Perform MAC
+                pe_ain = global_bram[(state - S_LOAD_global_dram_bound)>>1];
+                pe_addr = (state - S_LOAD_global_dram_bound)>>1;
                 pe_we = 0;
                 pe_valid = 1;
-            end
-
-            // TODO: 2. NEXT RISING EDGE: valid 꺼서 입력 종료시키기
-            if (0) begin
+            end else begin
+                // Wait
                 pe_we = 0;
                 pe_valid = 0;
             end
+
         end else begin
             // S_DONE
             // TODO: 구현
-        end
-    end
 
-    always @(negedge aclk) begin
-        // TODO: comb logic으로 떼기
-        if (state < 1 + (1<<(L_RAM_SIZE+1))) begin
-            // S_IDLE, S_LOAD: Do nothing
-        end else if (state < 1 + (1<<(L_RAM_SIZE+1)) + (1<<(L_RAM_SIZE))) begin
-            // S_CALC
-            // TODO: 3. ON FALLING EDGE: dvalid 1인지 체크, 1일경우 counter 1 증가시키고 다음 값 세팅할 준비
-            // TODO: 3a. dvalid가 1이면서 counter가 끝까지 올라갔을경우 S_DONE으로 넘어가기
-        end else begin
-            // S_DONE: Do nothing
         end
     end
 endmodule

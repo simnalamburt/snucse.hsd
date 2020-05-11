@@ -83,8 +83,10 @@ module my_pectl_test();
         rddata = 0;
 
         // S_CALC
+        #2720;
+
+        // S_DONE
         // TODO
-        #200;
         $finish;
     end
 endmodule
