@@ -7,13 +7,13 @@ module my_pectl_test();
     always #5 clk = ~clk;
 
     // PE controller
-    reg start;
+    reg start, reset;
     reg [31:0] rddata;
     wire done, addr, wrdata; // TODO
     my_pectl UUT(
         .start(start),
         .aclk(clk),
-        .aresetn(1),
+        .aresetn(~reset),
         .rddata(rddata),
         .done(done),
         .addr(addr),
@@ -21,15 +21,31 @@ module my_pectl_test();
     );
 
     initial begin
-        // S_IDLE
-        start = 0;
-        rddata = 0;
+        //
+        // Uninitialized state
+        //
+        reset = 0;
         #20;
 
-        start = 1;
+        //
+        // Reset states
+        //
+        reset = 1;
+        start = 0;
+        rddata = 0;
         #10;
+        reset = 0;
 
+        //
+        // S_IDLE
+        //
+        #30;
+
+        //
         // S_LOAD
+        //
+        start = 1;
+
         // TODO: $readmemh("din.txt", some register); 로 대체하기
         rddata = 32'h00000000; #10;
         rddata = 32'h3f800000; #10;
@@ -47,6 +63,7 @@ module my_pectl_test();
         rddata = 32'h41500000; #10;
         rddata = 32'h41600000; #10;
         rddata = 32'h41700000; #10;
+
         rddata = 32'h41800000; #10;
         rddata = 32'h41880000; #10;
         rddata = 32'h41900000; #10;

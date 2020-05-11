@@ -1,5 +1,8 @@
 `timescale 1ns / 1ps
 
+// NOTE: Latch가 synth 되는거 신경쓰지 않았음.
+// 최적화할때엔 Latch 안생기도록 막아야함. 수업 PPT 참고.
+
 module my_pectl #(
     parameter L_RAM_SIZE = 4
 ) (
@@ -28,21 +31,20 @@ module my_pectl #(
     //
     // PE
     //
-    reg [31:0] din;
+    reg [31:0] pe_ain, pe_din;
     reg [L_RAM_SIZE-1:0] pe_addr;
-    reg we;
-    initial we = 0;
-    wire dvalid, dout; // TODO: use this
+    reg pe_we, pe_valid;
+    wire pe_dvalid, pe_dout; // TODO: use this
     my_pe PE(
         .aclk(~aclk), // NOTE: Clock has been negated to avoid timing issue
         .aresetn(aresetn),
-        .ain(0), // TODO
-        .din(din),
+        .ain(pe_ain),
+        .din(pe_din),
         .addr(pe_addr),
-        .we(we),
-        .valid(0), // TODO
-        .dvalid(dvalid),
-        .dout(dout)
+        .we(pe_we),
+        .valid(pe_valid),
+        .dvalid(pe_dvalid),
+        .dout(pe_dout)
     );
     defparam PE.L_RAM_SIZE = L_RAM_SIZE;
 
@@ -52,60 +54,93 @@ module my_pectl #(
     (* ram_style = "block" *) reg [31:0] global_bram[0:2**L_RAM_SIZE - 1];
 
     //
-    // Counter
-    // Value range: [-1, 2**(L_RAM_SIZE+1)]
-    //
-    // TODO: 비트 크기 조절 필요할것임
-    reg [L_RAM_SIZE+1:0] counter;
-    initial counter = 0;
-    always @(negedge aclk) counter = counter + 1;
-
-    //
     // FSM
     //
-    localparam [1:0] S_IDLE = 0, S_LOAD = 1, S_CALC = 2, S_DONE = 3;
-    reg [1:0] state;
-    initial state = S_IDLE;
+    // S_IDLE: state == 0
+    // S_LOAD: 1 <= state < 1 + (1<<(L_RAM_SIZE+1))
+    // S_CALC: 1 + (1<<(L_RAM_SIZE+1)) <= state < 1 + (1<<(L_RAM_SIZE+1)) + (1<<(L_RAM_SIZE))
+    // S_DONE: otherwise
+    //
+    reg [L_RAM_SIZE+1:0] state;
+    wire [L_RAM_SIZE+1:0] next_state;
+    assign next_state = next(state, aresetn, start);
+    function [L_RAM_SIZE+1:0] next(input [L_RAM_SIZE+1:0] state, input aresetn, start);
+        if (!aresetn) begin
+            next = 0;
+        end else begin
+            if (state == 0) begin
+                // S_IDLE
+                next = start;
+            end else if (state < 1 + (1<<(L_RAM_SIZE+1))) begin
+                // S_LOAD
+                next = next + 1;
+            end else if (state < 1 + (1<<(L_RAM_SIZE+1)) + (1<<(L_RAM_SIZE))) begin
+                // S_CALC
+                // TODO
+                next = next;
+            end else begin
+                // S_DONE
+                // TODO
+                next = next;
+            end
+        end
+    endfunction
+
     always @(posedge aclk) begin
-        case (state)
-            S_IDLE: begin
-                // state == S_IDLE && start: go to S_LOAD
-                if (start) begin
-                    state = S_LOAD;
-                    counter = -1;
-                end
+        // Advance state
+        state = next_state;
+
+        // TODO: comb logic으로 떼기
+        if (state == 0) begin
+            // S_IDLE: Do nothing
+            pe_we = 0;
+            pe_valid = 0;
+
+        end else if (state < 1 + (1<<L_RAM_SIZE)) begin
+            // S_LOAD, store data into peram
+            pe_din = rddata;
+            pe_addr = state - 1;
+            pe_we = 1;
+            pe_valid = 0;
+
+        end else if (state < 1 + (1<<(L_RAM_SIZE+1))) begin
+            // S_LOAD, store data into global_bram
+            pe_we = 0;
+            pe_valid = 0;
+
+            global_bram[state - (1 + (1<<L_RAM_SIZE))] = rddata;
+
+        end else if (state < 1 + (1<<(L_RAM_SIZE+1)) + (1<<(L_RAM_SIZE))) begin
+            // S_CALC
+            // TODO: 1. ON RISING EDGE: 데이터 받아서 PE에 선입력시키기
+            if (0) begin
+                pe_ain = global_bram[state - (1 + (1<<(L_RAM_SIZE+1)))];
+                pe_addr = state - (1 + (1<<(L_RAM_SIZE+1)));
+                pe_we = 0;
+                pe_valid = 1;
             end
 
-            S_LOAD: begin
-                if (counter < 2**L_RAM_SIZE) begin
-                    // If L_RAM_SIZE = 4:
-                    // Load 16 data into local buffer in PE
-                    we = 1;
-                    din = rddata;
-                    pe_addr = counter;
-                end else if (counter < 2**(L_RAM_SIZE+1)) begin
-                    // If L_RAM_SIZE = 4:
-                    // Load 16 data into global BRAM
-                    we = 0;
-                    global_bram[counter & (2**L_RAM_SIZE - 1)] = rddata;
-
-                    // state == S_LOAD && counter == 31: go to S_CALC
-                    if (counter == 31) begin
-                        state = S_CALC;
-                        counter = -1;
-                    end
-                end
+            // TODO: 2. NEXT RISING EDGE: valid 꺼서 입력 종료시키기
+            if (0) begin
+                pe_we = 0;
+                pe_valid = 0;
             end
+        end else begin
+            // S_DONE
+            // TODO: 구현
+        end
+    end
 
-            S_CALC: begin
-                // TODO: 이 시점에 peram이랑 global_bram에 데이터가 다 차있어야 함
-
-                // TODO: 구현하기
-            end
-
-            // TODO
-            S_DONE: begin
-            end
-        endcase
+    always @(negedge aclk) begin
+        // TODO: comb logic으로 떼기
+        if (state < 1 + (1<<(L_RAM_SIZE+1))) begin
+            // S_IDLE, S_LOAD: Do nothing
+        end else if (state < 1 + (1<<(L_RAM_SIZE+1)) + (1<<(L_RAM_SIZE))) begin
+            // S_CALC
+            // TODO: 3. ON FALLING EDGE: dvalid 1인지 체크, 1일경우 counter 1 증가시키고 다음 값 세팅할 준비
+            // TODO: 3a. dvalid가 1이면서 counter가 끝까지 올라갔을경우 S_DONE으로 넘어가기
+        end else begin
+            // S_DONE: Do nothing
+        end
     end
 endmodule
