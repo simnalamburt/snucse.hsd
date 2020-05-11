@@ -1,5 +1,8 @@
 `timescale 1ns / 1ps
 
+// NOTE: Latch가 synth 되는거 신경쓰지 않았음.
+// 최적화할때엔 Latch 안생기도록 막아야함. 수업 PPT 참고.
+
 module my_pe #(
     parameter L_RAM_SIZE = 6
 ) (
@@ -50,16 +53,18 @@ module my_pe #(
 
     always @(posedge aclk) begin
         if (!aresetn) begin
-            dout = 0;
             dvalid = 0;
-        end else if (we) begin
+            dout = 0;
+        end
+
+        if (we) begin
             // we == 1, `din` is stored to `peram[addr]`
             peram[addr] = din;
         end
     end
 
     always @(negedge aclk) begin
-        dout = fma_result_valid ? fma_result : dout;
         dvalid = fma_result_valid;
+        if (fma_result_valid) dout = fma_result;
     end
 endmodule
