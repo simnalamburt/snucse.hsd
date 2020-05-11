@@ -14,6 +14,7 @@ module my_pe #(
 
     // peram-> port B, connected to local register
     input [31:0] din,
+    // Undefined behavior occurs if user reads uninitialized memory
     input [L_RAM_SIZE-1:0] addr,
     // we == 1, `din` is stored to `peram[addr]`
     // we == 0, `peram[addr]` is assigned to one of inputs of MAC
