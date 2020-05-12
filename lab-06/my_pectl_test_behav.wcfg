@@ -11,252 +11,149 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="3104885500fs"></ZoomStartTime>
-      <ZoomEndTime time="3369085501fs"></ZoomEndTime>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="321000001fs"></ZoomEndTime>
       <Cursor1Time time="0fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="98"></ValueColumnWidth>
+      <ValueColumnWidth column_width="94"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="21" />
-   <wvobject fp_name="/my_pectl_test/UUT/start" type="logic">
-      <obj_property name="ElementShortName">start</obj_property>
-      <obj_property name="ObjectShortName">start</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/aclk" type="logic">
-      <obj_property name="ElementShortName">aclk</obj_property>
-      <obj_property name="ObjectShortName">aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/aresetn" type="logic">
-      <obj_property name="ElementShortName">aresetn</obj_property>
-      <obj_property name="ObjectShortName">aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/rdaddr" type="array">
-      <obj_property name="ElementShortName">rdaddr[4:0]</obj_property>
-      <obj_property name="ObjectShortName">rdaddr[4:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/rddata" type="array">
-      <obj_property name="ElementShortName">rddata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rddata[31:0]</obj_property>
-      <obj_property name="Radix">REALRADIX</obj_property>
-      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-      <obj_property name="radix_fractionWidth">24</obj_property>
-      <obj_property name="radix_otherWidth">8</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/done" type="logic">
-      <obj_property name="ElementShortName">done</obj_property>
-      <obj_property name="ObjectShortName">done</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/wrdata" type="array">
-      <obj_property name="ElementShortName">wrdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">wrdata[31:0]</obj_property>
-      <obj_property name="Radix">REALRADIX</obj_property>
-      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-      <obj_property name="radix_fractionWidth">24</obj_property>
-      <obj_property name="radix_otherWidth">8</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/global_bram" type="array">
-      <obj_property name="ElementShortName">global_bram[0:15][31:0]</obj_property>
-      <obj_property name="ObjectShortName">global_bram[0:15][31:0]</obj_property>
-      <obj_property name="Radix">REALRADIX</obj_property>
-      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-      <obj_property name="radix_fractionWidth">24</obj_property>
-      <obj_property name="radix_otherWidth">8</obj_property>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[0]" type="array">
-         <obj_property name="ElementShortName">[0][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[0][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
+   <WVObjectSize size="5" />
+   <wvobject fp_name="group2344" type="group">
+      <obj_property name="label">inputs</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/my_pectl_test/UUT/start" type="logic">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
       </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[1]" type="array">
-         <obj_property name="ElementShortName">[1][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[1][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
+      <wvobject fp_name="/my_pectl_test/UUT/aclk" type="logic">
+         <obj_property name="ElementShortName">aclk</obj_property>
+         <obj_property name="ObjectShortName">aclk</obj_property>
       </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[2]" type="array">
-         <obj_property name="ElementShortName">[2][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
+      <wvobject fp_name="/my_pectl_test/UUT/aresetn" type="logic">
+         <obj_property name="ElementShortName">aresetn</obj_property>
+         <obj_property name="ObjectShortName">aresetn</obj_property>
       </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[3]" type="array">
-         <obj_property name="ElementShortName">[3][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[4]" type="array">
-         <obj_property name="ElementShortName">[4][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[4][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[5]" type="array">
-         <obj_property name="ElementShortName">[5][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[5][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[6]" type="array">
-         <obj_property name="ElementShortName">[6][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[6][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[7]" type="array">
-         <obj_property name="ElementShortName">[7][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[7][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[8]" type="array">
-         <obj_property name="ElementShortName">[8][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[8][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[9]" type="array">
-         <obj_property name="ElementShortName">[9][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[9][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[10]" type="array">
-         <obj_property name="ElementShortName">[10][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[10][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[11]" type="array">
-         <obj_property name="ElementShortName">[11][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[11][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[12]" type="array">
-         <obj_property name="ElementShortName">[12][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[12][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[13]" type="array">
-         <obj_property name="ElementShortName">[13][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[13][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[14]" type="array">
-         <obj_property name="ElementShortName">[14][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[14][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">8</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_test/UUT/global_bram[15]" type="array">
-         <obj_property name="ElementShortName">[15][31:0]</obj_property>
-         <obj_property name="ObjectShortName">[15][31:0]</obj_property>
+      <wvobject fp_name="/my_pectl_test/UUT/rddata" type="array">
+         <obj_property name="ElementShortName">rddata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">rddata[31:0]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
          <obj_property name="radix_otherWidth">8</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/state" type="array">
-      <obj_property name="ElementShortName">state[6:0]</obj_property>
-      <obj_property name="ObjectShortName">state[6:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   <wvobject fp_name="group2345" type="group">
+      <obj_property name="label">outputs</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/my_pectl_test/UUT/rdaddr" type="array">
+         <obj_property name="ElementShortName">rdaddr[4:0]</obj_property>
+         <obj_property name="ObjectShortName">rdaddr[4:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_test/UUT/done" type="logic">
+         <obj_property name="ElementShortName">done</obj_property>
+         <obj_property name="ObjectShortName">done</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_test/UUT/wrdata" type="array">
+         <obj_property name="ElementShortName">wrdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">wrdata[31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
    </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/pe_ain" type="array">
-      <obj_property name="ElementShortName">pe_ain[31:0]</obj_property>
-      <obj_property name="ObjectShortName">pe_ain[31:0]</obj_property>
-      <obj_property name="Radix">REALRADIX</obj_property>
-      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-      <obj_property name="radix_fractionWidth">24</obj_property>
-      <obj_property name="radix_otherWidth">8</obj_property>
+   <wvobject fp_name="group2346" type="group">
+      <obj_property name="label">BRAM</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/my_pectl_test/UUT/global_bram" type="array">
+         <obj_property name="ElementShortName">global_bram[0:15][31:0]</obj_property>
+         <obj_property name="ObjectShortName">global_bram[0:15][31:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+         <obj_property name="CustomSignalColor">#00FF00</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
    </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/pe_din" type="array">
-      <obj_property name="ElementShortName">pe_din[31:0]</obj_property>
-      <obj_property name="ObjectShortName">pe_din[31:0]</obj_property>
-      <obj_property name="Radix">REALRADIX</obj_property>
-      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-      <obj_property name="radix_fractionWidth">24</obj_property>
-      <obj_property name="radix_otherWidth">8</obj_property>
+   <wvobject fp_name="group2347" type="group">
+      <obj_property name="label">FSM</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/my_pectl_test/UUT/state" type="array">
+         <obj_property name="ElementShortName">state[6:0]</obj_property>
+         <obj_property name="ObjectShortName">state[6:0]</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_test/UUT/next_state" type="array">
+         <obj_property name="ElementShortName">next_state[6:0]</obj_property>
+         <obj_property name="ObjectShortName">next_state[6:0]</obj_property>
+         <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
    </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/pe_addr" type="array">
-      <obj_property name="ElementShortName">pe_addr[3:0]</obj_property>
-      <obj_property name="ObjectShortName">pe_addr[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/pe_we" type="logic">
-      <obj_property name="ElementShortName">pe_we</obj_property>
-      <obj_property name="ObjectShortName">pe_we</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/pe_valid" type="logic">
-      <obj_property name="ElementShortName">pe_valid</obj_property>
-      <obj_property name="ObjectShortName">pe_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/pe_dvalid" type="logic">
-      <obj_property name="ElementShortName">pe_dvalid</obj_property>
-      <obj_property name="ObjectShortName">pe_dvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/pe_ready" type="logic">
-      <obj_property name="ElementShortName">pe_ready</obj_property>
-      <obj_property name="ObjectShortName">pe_ready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/next_state" type="array">
-      <obj_property name="ElementShortName">next_state[6:0]</obj_property>
-      <obj_property name="ObjectShortName">next_state[6:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/L_RAM_SIZE" type="array">
-      <obj_property name="ElementShortName">L_RAM_SIZE[31:0]</obj_property>
-      <obj_property name="ObjectShortName">L_RAM_SIZE[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/S_LOAD_peram_bound" type="array">
-      <obj_property name="ElementShortName">S_LOAD_peram_bound[31:0]</obj_property>
-      <obj_property name="ObjectShortName">S_LOAD_peram_bound[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/S_LOAD_global_dram_bound" type="array">
-      <obj_property name="ElementShortName">S_LOAD_global_dram_bound[31:0]</obj_property>
-      <obj_property name="ObjectShortName">S_LOAD_global_dram_bound[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/S_CALC_bound" type="array">
-      <obj_property name="ElementShortName">S_CALC_bound[31:0]</obj_property>
-      <obj_property name="ObjectShortName">S_CALC_bound[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   <wvobject fp_name="group2348" type="group">
+      <obj_property name="label">PE</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/my_pectl_test/UUT/pe_ain" type="array">
+         <obj_property name="ElementShortName">pe_ain[31:0]</obj_property>
+         <obj_property name="ObjectShortName">pe_ain[31:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+         <obj_property name="CustomSignalColor">#FFA500</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_test/UUT/pe_din" type="array">
+         <obj_property name="ElementShortName">pe_din[31:0]</obj_property>
+         <obj_property name="ObjectShortName">pe_din[31:0]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+         <obj_property name="CustomSignalColor">#FFA500</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_test/UUT/pe_addr" type="array">
+         <obj_property name="ElementShortName">pe_addr[3:0]</obj_property>
+         <obj_property name="ObjectShortName">pe_addr[3:0]</obj_property>
+         <obj_property name="CustomSignalColor">#FFA500</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_test/UUT/pe_we" type="logic">
+         <obj_property name="ElementShortName">pe_we</obj_property>
+         <obj_property name="ObjectShortName">pe_we</obj_property>
+         <obj_property name="CustomSignalColor">#FFA500</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_test/UUT/pe_valid" type="logic">
+         <obj_property name="ElementShortName">pe_valid</obj_property>
+         <obj_property name="ObjectShortName">pe_valid</obj_property>
+         <obj_property name="CustomSignalColor">#FFA500</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_test/UUT/pe_dvalid" type="logic">
+         <obj_property name="ElementShortName">pe_dvalid</obj_property>
+         <obj_property name="ObjectShortName">pe_dvalid</obj_property>
+         <obj_property name="CustomSignalColor">#FFA500</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_test/UUT/pe_ready" type="logic">
+         <obj_property name="ElementShortName">pe_ready</obj_property>
+         <obj_property name="ObjectShortName">pe_ready</obj_property>
+         <obj_property name="CustomSignalColor">#FFA500</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+      </wvobject>
    </wvobject>
 </wave_config>
