@@ -24,7 +24,7 @@ module my_pectl #(
     // done == 1 if and only if internal state is S_DONE
     output done,
 
-    // TODO: meaning
+    // If done == 1, wrdata means result of vector inner product
     output [31:0] wrdata
 );
     //
@@ -58,7 +58,6 @@ module my_pectl #(
     reg [L_RAM_SIZE-1:0] pe_addr;
     reg pe_we, pe_valid;
     wire pe_dvalid;
-    wire [31:0] pe_dout;
     my_pe PE(
         .aclk(~aclk), // NOTE: Clock has been negated to avoid timing issue
         .aresetn(aresetn && state != 0),
@@ -68,7 +67,7 @@ module my_pectl #(
         .we(pe_we),
         .valid(pe_valid),
         .dvalid(pe_dvalid),
-        .dout(pe_dout)
+        .dout(wrdata)
     );
     defparam PE.L_RAM_SIZE = L_RAM_SIZE;
 
