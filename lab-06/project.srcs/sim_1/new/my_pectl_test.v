@@ -9,14 +9,14 @@ module my_pectl_test();
     // PE controller
     reg start, reset;
     reg [31:0] rddata;
-    wire done, addr, wrdata; // TODO
+    wire done, rdaddr, wrdata; // TODO
     my_pectl UUT(
         .start(start),
         .aclk(clk),
         .aresetn(~reset),
         .rddata(rddata),
         .done(done),
-        .addr(addr),
+        .rdaddr(rdaddr),
         .wrdata(wrdata)
     );
 
@@ -41,10 +41,13 @@ module my_pectl_test();
         //
         #30;
 
+        start = 1;
+        #10;
+        start = 0;
+
         //
         // S_LOAD
         //
-        start = 1;
 
         // TODO: $readmemh("din.txt", some register); 로 대체하기
         rddata = 32'h00000000; #10;
@@ -83,10 +86,14 @@ module my_pectl_test();
         rddata = 0;
 
         // S_CALC
-        #2720;
+        wait (done);
 
         // S_DONE
-        // TODO
+        #50;
+
+        // S_IDLE
+        #50;
+
         $finish;
     end
 endmodule

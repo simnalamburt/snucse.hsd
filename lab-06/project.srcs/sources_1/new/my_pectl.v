@@ -15,18 +15,42 @@ module my_pectl #(
     // Negetive reset. aresetn == 0 means that reset is activated
     input aresetn,
 
+    // If rdaddr is set, user should input data[rdaddr] as rddata
+    output reg [L_RAM_SIZE-1:0] rdaddr,
+
     // On S_LOAD state, rddata will be stored into peram and global_bram
     input [31:0] rddata,
 
-    // TODO: meaning
+    // done == 1 if and only if internal state is S_DONE
     output done,
-
-    // TODO: meaning
-    output [L_RAM_SIZE-1:0] addr,
 
     // TODO: meaning
     output [31:0] wrdata
 );
+    //
+    // Global BRAM
+    //
+    (* ram_style = "block" *) reg [31:0] global_bram[0:2**L_RAM_SIZE - 1];
+
+
+    //
+    // FSM
+    //
+    reg [L_RAM_SIZE+2:0] state;
+    // S_IDLE               : state == 0
+    // S_LOAD (peram)       : 1 <= state < 1 + (1<<L_RAM_SIZE)
+    //                        counter = state - 1
+    localparam S_LOAD_peram_bound = 1 + (1<<L_RAM_SIZE);
+    // S_LOAD (global_dram) : 1 + (1<<L_RAM_SIZE) <= state < 1 + (1<<(L_RAM_SIZE+1))
+    //                        counter = state - S_LOAD_peram_bound
+    localparam S_LOAD_global_dram_bound = 1 + (1<<(L_RAM_SIZE+1));
+    // S_CALC               : 1 + (1<<(L_RAM_SIZE+1)) <= state < 1 + (1<<(L_RAM_SIZE+2))
+    //                        counter = (state - S_LOAD_global_dram_bound)>>1
+    localparam S_CALC_bound = 1 + (1<<(L_RAM_SIZE+2));
+    // S_DONE               : 1 + (1<<(L_RAM_SIZE+2)) <= state < 6 + (1<<(L_RAM_SIZE+2))
+    //                        counter = state - S_CALC_bound
+
+
     //
     // PE
     //
@@ -37,7 +61,7 @@ module my_pectl #(
     wire [31:0] pe_dout;
     my_pe PE(
         .aclk(~aclk), // NOTE: Clock has been negated to avoid timing issue
-        .aresetn(aresetn),
+        .aresetn(aresetn && state != 0),
         .ain(pe_ain),
         .din(pe_din),
         .addr(pe_addr),
@@ -53,30 +77,6 @@ module my_pectl #(
     always @(negedge aclk) begin
         pe_ready = pe_dvalid;
     end
-
-
-    //
-    // Global BRAM
-    //
-    (* ram_style = "block" *) reg [31:0] global_bram[0:2**L_RAM_SIZE - 1];
-
-
-    //
-    // FSM
-    //
-    reg [L_RAM_SIZE+2:0] state;
-    // S_IDLE               : state == 0
-    // S_LOAD (peram)       : 1 <= state < 1 + (1<<L_RAM_SIZE)
-    //                        counter = state - 1
-    // S_LOAD (global_dram) : 1 + (1<<L_RAM_SIZE) <= state < 1 + (1<<(L_RAM_SIZE+1))
-    //                        counter = state - (1 + (1<<L_RAM_SIZE))
-    // S_CALC               : 1 + (1<<(L_RAM_SIZE+1)) <= state < 1 + (1<<(L_RAM_SIZE+2))
-    //                        counter = (state - (1 + (1<<(L_RAM_SIZE+1))))>>1
-    // TODO
-    // S_DONE               : otherwise
-    localparam S_LOAD_peram_bound = 1 + (1<<L_RAM_SIZE);
-    localparam S_LOAD_global_dram_bound = 1 + (1<<(L_RAM_SIZE+1));
-    localparam S_CALC_bound = 1 + (1<<(L_RAM_SIZE+2));
 
 
     //
@@ -108,8 +108,11 @@ module my_pectl #(
 
             end else begin
                 // S_DONE
-                // TODO
-                next = state;
+                if (state - S_CALC_bound < 4) begin
+                    next = state + 1;
+                end else begin
+                    next = 0;
+                end
 
             end
         end
@@ -117,12 +120,15 @@ module my_pectl #(
 
 
     //
+    // Output
+    //
+    assign done = S_CALC_bound <= state;
+
+
+    //
     // Output (rising edge)
     //
     always @(posedge aclk) begin
-        // Advance state
-        state = next_state;
-
         if (state == 0) begin
             // S_IDLE: Do nothing
             pe_we = 0;
@@ -158,7 +164,31 @@ module my_pectl #(
 
         end else begin
             // S_DONE
-            // TODO: 구현
+            pe_we = 0;
+            pe_valid = 0;
+        end
+
+        // Advance state
+        state = next_state;
+    end
+
+    //
+    // Output (falling edge)
+    //
+    always @(negedge aclk) begin
+        if (state == 0) begin
+            // S_IDLE: Do nothing
+
+        end else if (state < S_LOAD_peram_bound) begin
+            // S_LOAD, store data into peram
+            rdaddr = state - 1;
+
+        end else if (state < S_LOAD_global_dram_bound) begin
+            // S_LOAD, store data into global_bram
+            rdaddr = state - S_LOAD_peram_bound;
+
+        end else begin
+            // S_CALC, S_DONE: Do nothing
 
         end
     end
