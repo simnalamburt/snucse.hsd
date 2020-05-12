@@ -16,7 +16,7 @@ module my_pectl #(
     input aresetn,
 
     // If rdaddr is set, user should input data[rdaddr] as rddata
-    output reg [L_RAM_SIZE-1:0] rdaddr,
+    output reg [L_RAM_SIZE:0] rdaddr,
 
     // On S_LOAD state, rddata will be stored into peram and global_bram
     input [31:0] rddata,
@@ -176,20 +176,9 @@ module my_pectl #(
     // Output (falling edge)
     //
     always @(negedge aclk) begin
-        if (state == 0) begin
-            // S_IDLE: Do nothing
-
-        end else if (state < S_LOAD_peram_bound) begin
-            // S_LOAD, store data into peram
+        if (0 < state && state < S_LOAD_global_dram_bound) begin
+            // S_LOAD
             rdaddr = state - 1;
-
-        end else if (state < S_LOAD_global_dram_bound) begin
-            // S_LOAD, store data into global_bram
-            rdaddr = state - S_LOAD_peram_bound;
-
-        end else begin
-            // S_CALC, S_DONE: Do nothing
-
         end
     end
 endmodule
