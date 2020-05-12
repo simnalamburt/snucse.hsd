@@ -12,12 +12,12 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="686000001fs"></ZoomEndTime>
+      <ZoomEndTime time="263400001fs"></ZoomEndTime>
       <Cursor1Time time="0fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="114"></ValueColumnWidth>
+      <ValueColumnWidth column_width="102"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="22" />
    <wvobject fp_name="/my_pectl_test/UUT/start" type="logic">
@@ -32,6 +32,11 @@
       <obj_property name="ElementShortName">aresetn</obj_property>
       <obj_property name="ObjectShortName">aresetn</obj_property>
    </wvobject>
+   <wvobject fp_name="/my_pectl_test/UUT/rdaddr" type="array">
+      <obj_property name="ElementShortName">rdaddr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rdaddr[4:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
    <wvobject fp_name="/my_pectl_test/UUT/rddata" type="array">
       <obj_property name="ElementShortName">rddata[31:0]</obj_property>
       <obj_property name="ObjectShortName">rddata[31:0]</obj_property>
@@ -44,13 +49,26 @@
       <obj_property name="ElementShortName">done</obj_property>
       <obj_property name="ObjectShortName">done</obj_property>
    </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/addr" type="array">
-      <obj_property name="ElementShortName">addr[3:0]</obj_property>
-      <obj_property name="ObjectShortName">addr[3:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="/my_pectl_test/UUT/wrdata" type="array">
       <obj_property name="ElementShortName">wrdata[31:0]</obj_property>
       <obj_property name="ObjectShortName">wrdata[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_test/UUT/global_bram" type="array">
+      <obj_property name="ElementShortName">global_bram[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">global_bram[0:15][31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_test/UUT/state" type="array">
+      <obj_property name="ElementShortName">state[6:0]</obj_property>
+      <obj_property name="ObjectShortName">state[6:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/my_pectl_test/UUT/pe_ain" type="array">
       <obj_property name="ElementShortName">pe_ain[31:0]</obj_property>
@@ -71,7 +89,6 @@
    <wvobject fp_name="/my_pectl_test/UUT/pe_addr" type="array">
       <obj_property name="ElementShortName">pe_addr[3:0]</obj_property>
       <obj_property name="ObjectShortName">pe_addr[3:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/my_pectl_test/UUT/pe_we" type="logic">
       <obj_property name="ElementShortName">pe_we</obj_property>
@@ -92,29 +109,14 @@
       <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
       <obj_property name="radix_fractionWidth">24</obj_property>
       <obj_property name="radix_otherWidth">8</obj_property>
-      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="/my_pectl_test/UUT/pe_ready" type="logic">
       <obj_property name="ElementShortName">pe_ready</obj_property>
       <obj_property name="ObjectShortName">pe_ready</obj_property>
    </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/global_bram" type="array">
-      <obj_property name="ElementShortName">global_bram[0:15][31:0]</obj_property>
-      <obj_property name="ObjectShortName">global_bram[0:15][31:0]</obj_property>
-      <obj_property name="Radix">REALRADIX</obj_property>
-      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
-      <obj_property name="radix_fractionWidth">24</obj_property>
-      <obj_property name="radix_otherWidth">8</obj_property>
-   </wvobject>
-   <wvobject fp_name="/my_pectl_test/UUT/state" type="array">
-      <obj_property name="ElementShortName">state[6:0]</obj_property>
-      <obj_property name="ObjectShortName">state[6:0]</obj_property>
-      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-   </wvobject>
    <wvobject fp_name="/my_pectl_test/UUT/next_state" type="array">
-      <obj_property name="ElementShortName">next_state[5:0]</obj_property>
-      <obj_property name="ObjectShortName">next_state[5:0]</obj_property>
+      <obj_property name="ElementShortName">next_state[6:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state[6:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/my_pectl_test/UUT/L_RAM_SIZE" type="array">
