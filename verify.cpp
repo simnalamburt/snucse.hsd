@@ -2,8 +2,6 @@
 #include <cstdlib>
 #include "fpga_api.h"
 
-// g++ -I./include main.cpp ./src/fpga_api.cpp -o run.exe && sudo ./run.exe
-
 int main(void)
 {
         printf("program start");
