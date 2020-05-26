@@ -20,6 +20,14 @@ int main(int argc, char** argv)
   for (i = SIZE; i < SIZE * 2; i++)
     *(fpga_bram + i) = 0.0f; 
 
+  printf(
+    "\n"
+    "Hardware System Design, Lab 9\n"
+    "\n"
+    "Name       : 김지현\n"
+    "Student ID : 2013-11392\n"
+    "\n"
+  );
   printf("%-10s%-10s\n", "addr", "FPGA(hex)");
   for (i = 0; i < SIZE * 2; i++)
     printf("%-10d%-10X\n", i, *(fpga_bram + i));
@@ -31,6 +39,7 @@ int main(int argc, char** argv)
   printf("%-10s%-10s\n", "addr", "FPGA(hex)");
   for (i = 0; i < SIZE * 2; i++)
     printf("%-10d%-10X\n", i, *(fpga_bram + i));
+  printf("\n");
 
   return 0;
 }
