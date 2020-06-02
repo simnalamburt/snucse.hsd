@@ -4,7 +4,7 @@
 // 최적화할때엔 Latch 안생기도록 막아야함. 수업 PPT 참고.
 
 module my_pectl #(
-    parameter L_RAM_SIZE = 4
+    parameter LOG2_DIM = 4
 ) (
     // On S_IDLE state, start == 1 moves states to S_LOAD
     input start,
@@ -16,7 +16,7 @@ module my_pectl #(
     input aresetn,
 
     // If rdaddr is set, user should input data[rdaddr] as rddata
-    output reg [L_RAM_SIZE:0] rdaddr,
+    output reg [LOG2_DIM:0] rdaddr,
 
     // On S_LOAD state, rddata will be stored into peram and global_bram
     input [31:0] rddata,
@@ -30,24 +30,24 @@ module my_pectl #(
     //
     // Global BRAM
     //
-    (* ram_style = "block" *) reg [31:0] global_bram[0:2**L_RAM_SIZE - 1];
+    (* ram_style = "block" *) reg [31:0] global_bram[0:2**LOG2_DIM - 1];
 
 
     //
     // FSM
     //
-    reg [L_RAM_SIZE+2:0] state;
+    reg [LOG2_DIM+2:0] state;
     // S_IDLE               : state == 0
-    // S_LOAD (peram)       : 1 <= state < 1 + (1<<L_RAM_SIZE)
+    // S_LOAD (peram)       : 1 <= state < 1 + (1<<LOG2_DIM)
     //                        counter = state - 1
-    localparam S_LOAD_peram_bound = 1 + (1<<L_RAM_SIZE);
-    // S_LOAD (global_dram) : 1 + (1<<L_RAM_SIZE) <= state < 1 + (1<<(L_RAM_SIZE+1))
+    localparam S_LOAD_peram_bound = 1 + (1<<LOG2_DIM);
+    // S_LOAD (global_dram) : 1 + (1<<LOG2_DIM) <= state < 1 + (1<<(LOG2_DIM+1))
     //                        counter = state - S_LOAD_peram_bound
-    localparam S_LOAD_global_dram_bound = 1 + (1<<(L_RAM_SIZE+1));
-    // S_CALC               : 1 + (1<<(L_RAM_SIZE+1)) <= state < 1 + (1<<(L_RAM_SIZE+2))
+    localparam S_LOAD_global_dram_bound = 1 + (1<<(LOG2_DIM+1));
+    // S_CALC               : 1 + (1<<(LOG2_DIM+1)) <= state < 1 + (1<<(LOG2_DIM+2))
     //                        counter = (state - S_LOAD_global_dram_bound)>>1
-    localparam S_CALC_bound = 1 + (1<<(L_RAM_SIZE+2));
-    // S_DONE               : 1 + (1<<(L_RAM_SIZE+2)) <= state < 6 + (1<<(L_RAM_SIZE+2))
+    localparam S_CALC_bound = 1 + (1<<(LOG2_DIM+2));
+    // S_DONE               : 1 + (1<<(LOG2_DIM+2)) <= state < 6 + (1<<(LOG2_DIM+2))
     //                        counter = state - S_CALC_bound
 
 
@@ -55,7 +55,7 @@ module my_pectl #(
     // PE
     //
     reg [31:0] pe_ain, pe_din;
-    reg [L_RAM_SIZE-1:0] pe_addr;
+    reg [LOG2_DIM-1:0] pe_addr;
     reg pe_we, pe_valid;
     wire pe_dvalid;
     my_pe PE(
@@ -69,7 +69,7 @@ module my_pectl #(
         .dvalid(pe_dvalid),
         .dout(wrdata)
     );
-    defparam PE.L_RAM_SIZE = L_RAM_SIZE;
+    defparam PE.L_RAM_SIZE = LOG2_DIM;
 
     // pe_ready: Is PE ready for next MAC input?
     reg pe_ready;
@@ -81,9 +81,9 @@ module my_pectl #(
     //
     // Next state
     //
-    wire [L_RAM_SIZE+2:0] next_state;
+    wire [LOG2_DIM+2:0] next_state;
     assign next_state = next(state, aresetn, start, pe_ready);
-    function [L_RAM_SIZE+2:0] next(input [L_RAM_SIZE+2:0] state, input aresetn, start, pe_ready);
+    function [LOG2_DIM+2:0] next(input [LOG2_DIM+2:0] state, input aresetn, start, pe_ready);
         if (!aresetn) begin
             next = 0;
         end else begin
