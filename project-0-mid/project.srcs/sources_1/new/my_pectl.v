@@ -36,19 +36,19 @@ module my_pectl #(
     //
     // FSM
     //
-    reg [LOG2_DIM+2:0] state;
-    // S_IDLE               : state == 0
-    // S_LOAD (peram)       : 1 <= state < 1 + (1<<LOG2_DIM)
-    //                        counter = state - 1
+    reg [LOG2_DIM+2:0] oldstate;
+    // S_IDLE               : oldstate == 0
+    // S_LOAD (peram)       : 1 <= oldstate < 1 + (1<<LOG2_DIM)
+    //                        counter = oldstate - 1
     localparam S_LOAD_peram_bound = 1 + (1<<LOG2_DIM);
-    // S_LOAD (global_dram) : 1 + (1<<LOG2_DIM) <= state < 1 + (1<<(LOG2_DIM+1))
-    //                        counter = state - S_LOAD_peram_bound
+    // S_LOAD (global_dram) : 1 + (1<<LOG2_DIM) <= oldstate < 1 + (1<<(LOG2_DIM+1))
+    //                        counter = oldstate - S_LOAD_peram_bound
     localparam S_LOAD_global_dram_bound = 1 + (1<<(LOG2_DIM+1));
-    // S_CALC               : 1 + (1<<(LOG2_DIM+1)) <= state < 1 + (1<<(LOG2_DIM+2))
-    //                        counter = (state - S_LOAD_global_dram_bound)>>1
+    // S_CALC               : 1 + (1<<(LOG2_DIM+1)) <= oldstate < 1 + (1<<(LOG2_DIM+2))
+    //                        counter = (oldstate - S_LOAD_global_dram_bound)>>1
     localparam S_CALC_bound = 1 + (1<<(LOG2_DIM+2));
-    // S_DONE               : 1 + (1<<(LOG2_DIM+2)) <= state < 6 + (1<<(LOG2_DIM+2))
-    //                        counter = state - S_CALC_bound
+    // S_DONE               : 1 + (1<<(LOG2_DIM+2)) <= oldstate < 6 + (1<<(LOG2_DIM+2))
+    //                        counter = oldstate - S_CALC_bound
 
 
     //
@@ -60,7 +60,7 @@ module my_pectl #(
     wire pe_dvalid;
     my_pe PE(
         .aclk(~aclk), // NOTE: Clock has been negated to avoid timing issue
-        .aresetn(aresetn && state != 0),
+        .aresetn(aresetn && oldstate != 0),
         .ain(pe_ain),
         .din(pe_din),
         .addr(pe_addr),
@@ -78,39 +78,38 @@ module my_pectl #(
     end
 
 
-    //
-    // Next state
-    //
-    wire [LOG2_DIM+2:0] next_state;
-    assign next_state = next(state, aresetn, start, pe_ready);
-    function [LOG2_DIM+2:0] next(input [LOG2_DIM+2:0] state, input aresetn, start, pe_ready);
+    // Next oldstate
+    // TODO: Remove me
+    wire [LOG2_DIM+2:0] next_oldstate;
+    assign next_oldstate = next_old(oldstate, aresetn, start, pe_ready);
+    function [LOG2_DIM+2:0] next_old(input [LOG2_DIM+2:0] oldstate, input aresetn, start, pe_ready);
         if (!aresetn) begin
-            next = 0;
+            next_old = 0;
         end else begin
-            if (state == 0) begin
+            if (oldstate == 0) begin
                 // S_IDLE
-                next = start;
+                next_old = start;
 
-            end else if (state < S_LOAD_global_dram_bound) begin
+            end else if (oldstate < S_LOAD_global_dram_bound) begin
                 // S_LOAD
-                next = state + 1;
+                next_old = oldstate + 1;
 
-            end else if (state < S_CALC_bound) begin
+            end else if (oldstate < S_CALC_bound) begin
                 // S_CALC
-                if (!((state - S_LOAD_global_dram_bound)&1)) begin
-                    // Go to the wait state
-                    next = state + 1;
+                if (!((oldstate - S_LOAD_global_dram_bound)&1)) begin
+                    // Go to the wait oldstate
+                    next_old = oldstate + 1;
                 end else begin
                     // Finish wait only at pe_ready
-                    next = state + pe_ready;
+                    next_old = oldstate + pe_ready;
                 end
 
             end else begin
                 // S_DONE
-                if (state - S_CALC_bound < 4) begin
-                    next = state + 1;
+                if (oldstate - S_CALC_bound < 4) begin
+                    next_old = oldstate + 1;
                 end else begin
-                    next = 0;
+                    next_old = 0;
                 end
 
             end
@@ -121,38 +120,38 @@ module my_pectl #(
     //
     // Output
     //
-    assign done = S_CALC_bound <= state;
+    assign done = S_CALC_bound <= oldstate;
 
 
     //
     // Output (rising edge)
     //
     always @(posedge aclk) begin
-        if (state == 0) begin
+        if (oldstate == 0) begin
             // S_IDLE: Do nothing
             pe_we = 0;
             pe_valid = 0;
 
-        end else if (state < S_LOAD_peram_bound) begin
+        end else if (oldstate < S_LOAD_peram_bound) begin
             // S_LOAD, store data into peram
             pe_din = rddata;
-            pe_addr = state - 1;
+            pe_addr = oldstate - 1;
             pe_we = 1;
             pe_valid = 0;
 
-        end else if (state < S_LOAD_global_dram_bound) begin
+        end else if (oldstate < S_LOAD_global_dram_bound) begin
             // S_LOAD, store data into global_bram
             pe_we = 0;
             pe_valid = 0;
 
-            global_bram[state - S_LOAD_peram_bound] = rddata;
+            global_bram[oldstate - S_LOAD_peram_bound] = rddata;
 
-        end else if (state < S_CALC_bound) begin
+        end else if (oldstate < S_CALC_bound) begin
             // S_CALC
-            if (!((state - S_LOAD_global_dram_bound)&1)) begin
+            if (!((oldstate - S_LOAD_global_dram_bound)&1)) begin
                 // Perform MAC
-                pe_ain = global_bram[(state - S_LOAD_global_dram_bound)>>1];
-                pe_addr = (state - S_LOAD_global_dram_bound)>>1;
+                pe_ain = global_bram[(oldstate - S_LOAD_global_dram_bound)>>1];
+                pe_addr = (oldstate - S_LOAD_global_dram_bound)>>1;
                 pe_we = 0;
                 pe_valid = 1;
             end else begin
@@ -167,17 +166,17 @@ module my_pectl #(
             pe_valid = 0;
         end
 
-        // Advance state
-        state = next_state;
+        // Advance oldstate
+        oldstate = next_oldstate;
     end
 
     //
     // Output (falling edge)
     //
     always @(negedge aclk) begin
-        if (0 < state && state < S_LOAD_global_dram_bound) begin
+        if (0 < oldstate && oldstate < S_LOAD_global_dram_bound) begin
             // S_LOAD
-            rdaddr = state - 1;
+            rdaddr = oldstate - 1;
         end
     end
 endmodule
