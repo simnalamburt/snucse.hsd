@@ -54,8 +54,13 @@ module my_pectl_tb();
         wait (done);
 
         // S_DONE
-        $display("\n\nResult of vector inner product: 0x%8x", wrdata);
-        $display("Expected output: 0x4b035180\n");
+        $display("");
+        $display("");
+        $display("Result       : 0x%8x", wrdata);
+        $display("Expected V*V : 0x45458000"); // TODO: Remove me
+        $display("Expected M*V : 0x4b035180");
+        $display("Finished at  : %d", $time);
+        $display("");
         #50;
 
         // S_IDLE
