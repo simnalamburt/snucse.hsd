@@ -1,7 +1,6 @@
 `timescale 1ns / 1ps
 
-// NOTE: Latch가 synth 되는거 신경쓰지 않았음.
-// 최적화할때엔 Latch 안생기도록 막아야함. 수업 PPT 참고.
+// TODO: 실수로 synth되는 latch 없는지 검사하기
 
 module my_pectl #(
     parameter LOG2_DIM = 4
@@ -180,6 +179,7 @@ module my_pectl #(
         state = next_state;
         state_counter = next_state_counter;
 
+        // TODO: output 결정하는 combinational logic 분리하기
         case (state)
             S_IDLE: begin
                 pe_we = 0;
