@@ -36,8 +36,6 @@ module my_pectl #(
     //
     // FSM
     //
-    // TODO 1: oldstate가 등장하는 모든 곳 옆에 state, state_counter 배치하기
-    // TODO 2: oldstate를 state, state_counter로 전환
     // TODO 3: oldstate 삭제
     localparam S_IDLE        = 3'b000;
     localparam S_LOAD_PE     = 3'b001;
@@ -117,18 +115,9 @@ module my_pectl #(
     // Old FSM
     // TODO: Remove me
     reg [LOG2_DIM+2:0] oldstate;
-    // S_IDLE               : oldstate == 0
-    // S_LOAD (peram)       : 1 <= oldstate < 1 + (1<<LOG2_DIM)
-    //                        counter = oldstate - 1
     localparam S_LOAD_peram_bound = 1 + (1<<LOG2_DIM);
-    // S_LOAD (global_dram) : 1 + (1<<LOG2_DIM) <= oldstate < 1 + (1<<(LOG2_DIM+1))
-    //                        counter = oldstate - S_LOAD_peram_bound
     localparam S_LOAD_global_dram_bound = 1 + (1<<(LOG2_DIM+1));
-    // S_CALC               : 1 + (1<<(LOG2_DIM+1)) <= oldstate < 1 + (1<<(LOG2_DIM+2))
-    //                        counter = (oldstate - S_LOAD_global_dram_bound)>>1
     localparam S_CALC_bound = 1 + (1<<(LOG2_DIM+2));
-    // S_DONE               : 1 + (1<<(LOG2_DIM+2)) <= oldstate < 6 + (1<<(LOG2_DIM+2))
-    //                        counter = oldstate - S_CALC_bound
 
 
     //
@@ -140,7 +129,7 @@ module my_pectl #(
     wire pe_dvalid;
     my_pe PE(
         .aclk(~aclk), // NOTE: Clock has been negated to avoid timing issue
-        .aresetn(aresetn && oldstate != 0),
+        .aresetn(aresetn && state != S_IDLE),
         .ain(pe_ain),
         .din(pe_din),
         .addr(pe_addr),
@@ -200,51 +189,44 @@ module my_pectl #(
     //
     // Output
     //
-    assign done = S_CALC_bound <= oldstate;
+    assign done = state == S_DONE;
 
 
     //
     // Output (rising edge)
     //
     always @(posedge aclk) begin
-        if (oldstate == 0) begin
-            // S_IDLE: Do nothing
-            pe_we = 0;
-            pe_valid = 0;
-
-        end else if (oldstate < S_LOAD_peram_bound) begin
-            // S_LOAD, store data into peram
-            pe_din = rddata;
-            pe_addr = oldstate - 1;
-            pe_we = 1;
-            pe_valid = 0;
-
-        end else if (oldstate < S_LOAD_global_dram_bound) begin
-            // S_LOAD, store data into global_bram
-            pe_we = 0;
-            pe_valid = 0;
-
-            global_bram[oldstate - S_LOAD_peram_bound] = rddata;
-
-        end else if (oldstate < S_CALC_bound) begin
-            // S_CALC
-            if (!((oldstate - S_LOAD_global_dram_bound)&1)) begin
-                // Perform MAC
-                pe_ain = global_bram[(oldstate - S_LOAD_global_dram_bound)>>1];
-                pe_addr = (oldstate - S_LOAD_global_dram_bound)>>1;
-                pe_we = 0;
-                pe_valid = 1;
-            end else begin
-                // Wait
+        case (state)
+            S_IDLE: begin
                 pe_we = 0;
                 pe_valid = 0;
             end
-
-        end else begin
-            // S_DONE
-            pe_we = 0;
-            pe_valid = 0;
-        end
+            S_LOAD_PE: begin
+                pe_din = rddata;
+                pe_addr = state_counter;
+                pe_we = 1;
+                pe_valid = 0;
+            end
+            S_LOAD_SHARED: begin
+                pe_we = 0;
+                pe_valid = 0;
+                global_bram[state_counter] = rddata;
+            end
+            S_CALC_READY: begin
+                pe_ain = global_bram[state_counter];
+                pe_addr = state_counter;
+                pe_we = 0;
+                pe_valid = 1;
+            end
+            S_CALC_WAIT: begin
+                pe_we = 0;
+                pe_valid = 0;
+            end
+            S_DONE: begin
+                pe_we = 0;
+                pe_valid = 0;
+            end
+        endcase
 
         // Advance oldstate
         oldstate = next_oldstate; // TODO: Remove
@@ -256,9 +238,12 @@ module my_pectl #(
     // Output (falling edge)
     //
     always @(negedge aclk) begin
-        if (0 < oldstate && oldstate < S_LOAD_global_dram_bound) begin
-            // S_LOAD
-            rdaddr = oldstate - 1;
+        if (state == S_LOAD_PE) begin
+            rdaddr = state_counter;
+        end else if (state == S_LOAD_SHARED) begin
+            // TODO: Use me
+            // rdaddr = (1<<(LOG2_DIM*2)) + state_counter;
+            rdaddr = (1<<(LOG2_DIM)) + state_counter;
         end
     end
 endmodule
