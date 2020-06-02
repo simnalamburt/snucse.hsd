@@ -59,7 +59,7 @@ module my_pectl_tb();
         // S_DONE
         $display("");
         $display("");
-        $display("Expected result : 46f9b000 47c22c00 4822f600 4864d600 48935b00 48b44b00 48d53b00 48f62b00 490b8d80 491c0580 492c7d80 493cf580 494d6d80 495de580 496e5d80 497ed580");
+        $display("Expected result : 0x46f9b000 0x47c22c00 0x4822f600 0x4864d600 0x48935b00 0x48b44b00 0x48d53b00 0x48f62b00 0x490b8d80 0x491c0580 0x492c7d80 0x493cf580 0x494d6d80 0x495de580 0x496e5d80 0x497ed580");
         $display("Actual result   : 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x 0x%8x",
             wrdata['h0], wrdata['h1], wrdata['h2], wrdata['h3],
             wrdata['h4], wrdata['h5], wrdata['h6], wrdata['h7],
