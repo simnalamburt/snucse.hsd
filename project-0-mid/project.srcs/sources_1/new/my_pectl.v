@@ -16,7 +16,7 @@ module my_pectl #(
     input aresetn,
 
     // If rdaddr is set, user should input data[rdaddr] as rddata
-    output reg [LOG2_DIM:0] rdaddr,
+    output reg [2*LOG2_DIM:0] rdaddr,
 
     // On S_LOAD state, rddata will be stored into peram and global_bram
     input [31:0] rddata,

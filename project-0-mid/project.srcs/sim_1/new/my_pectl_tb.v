@@ -2,7 +2,14 @@
 
 module my_pectl_tb();
     // testbench data
-    reg [31:0] data[0:(1<<5) - 1];
+    //
+    // 000..255: Matrix with 16*16 elements
+    //   000..015: row 1
+    //   016..031: row 2
+    //   032..047: row 3
+    //   (cont)
+    // 256..271: Vector with 16 elements
+    reg [31:0] data[0:271];
 
     // clock
     reg clk;
@@ -12,7 +19,7 @@ module my_pectl_tb();
     // PE controller
     reg start, reset;
     wire done;
-    wire [4:0] rdaddr;
+    wire [8:0] rdaddr;
     wire [31:0] wrdata;
     my_pectl UUT(
         .start(start),
@@ -47,7 +54,8 @@ module my_pectl_tb();
         wait (done);
 
         // S_DONE
-        $display("\n\nResult of vector inner product: %8x\n\n", wrdata);
+        $display("\n\nResult of vector inner product: 0x%8x", wrdata);
+        $display("Expected output: 0x4b035180\n");
         #50;
 
         // S_IDLE
