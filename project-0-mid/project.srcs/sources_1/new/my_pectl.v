@@ -36,7 +36,6 @@ module my_pectl #(
     //
     // FSM
     //
-    // TODO 3: oldstate 삭제
     localparam S_IDLE        = 3'b000;
     localparam S_LOAD_PE     = 3'b001;
     localparam S_LOAD_SHARED = 3'b010;
@@ -112,14 +111,6 @@ module my_pectl #(
     endfunction
 
 
-    // Old FSM
-    // TODO: Remove me
-    reg [LOG2_DIM+2:0] oldstate;
-    localparam S_LOAD_peram_bound = 1 + (1<<LOG2_DIM);
-    localparam S_LOAD_global_dram_bound = 1 + (1<<(LOG2_DIM+1));
-    localparam S_CALC_bound = 1 + (1<<(LOG2_DIM+2));
-
-
     //
     // PE
     //
@@ -145,45 +136,6 @@ module my_pectl #(
     always @(negedge aclk) begin
         pe_ready = pe_dvalid;
     end
-
-
-    // Next oldstate
-    // TODO: Remove me
-    wire [LOG2_DIM+2:0] next_oldstate;
-    assign next_oldstate = next_old(oldstate, aresetn, start, pe_ready);
-    function [LOG2_DIM+2:0] next_old(input [LOG2_DIM+2:0] oldstate, input aresetn, start, pe_ready);
-        if (!aresetn) begin
-            next_old = 0;
-        end else begin
-            if (oldstate == 0) begin
-                // S_IDLE
-                next_old = start;
-
-            end else if (oldstate < S_LOAD_global_dram_bound) begin
-                // S_LOAD
-                next_old = oldstate + 1;
-
-            end else if (oldstate < S_CALC_bound) begin
-                // S_CALC
-                if (!((oldstate - S_LOAD_global_dram_bound)&1)) begin
-                    // Go to the wait oldstate
-                    next_old = oldstate + 1;
-                end else begin
-                    // Finish wait only at pe_ready
-                    next_old = oldstate + pe_ready;
-                end
-
-            end else begin
-                // S_DONE
-                if (oldstate - S_CALC_bound < 4) begin
-                    next_old = oldstate + 1;
-                end else begin
-                    next_old = 0;
-                end
-
-            end
-        end
-    endfunction
 
 
     //
@@ -228,8 +180,7 @@ module my_pectl #(
             end
         endcase
 
-        // Advance oldstate
-        oldstate = next_oldstate; // TODO: Remove
+        // Advance state
         state = next_state;
         state_counter = next_state_counter;
     end
