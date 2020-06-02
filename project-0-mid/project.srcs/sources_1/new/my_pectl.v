@@ -148,6 +148,10 @@ module my_pectl #(
     // Output (rising edge)
     //
     always @(posedge aclk) begin
+        // Advance state
+        state = next_state;
+        state_counter = next_state_counter;
+
         case (state)
             S_IDLE: begin
                 pe_we = 0;
@@ -179,22 +183,17 @@ module my_pectl #(
                 pe_valid = 0;
             end
         endcase
-
-        // Advance state
-        state = next_state;
-        state_counter = next_state_counter;
     end
 
     //
     // Output (falling edge)
     //
     always @(negedge aclk) begin
-        if (state == S_LOAD_PE) begin
-            rdaddr = state_counter;
-        end else if (state == S_LOAD_SHARED) begin
-            // TODO: Use me
-            // rdaddr = (1<<(LOG2_DIM*2)) + state_counter;
-            rdaddr = (1<<(LOG2_DIM)) + state_counter;
-        end
+        case (state)
+            S_LOAD_PE: rdaddr = state_counter + 1;
+            // S_LOAD_SHARED: rdaddr = (1<<(LOG2_DIM*2)) + state_counter + 1;
+            S_LOAD_SHARED: rdaddr = (1<<(LOG2_DIM)) + state_counter + 1;
+            default: rdaddr = 0;
+        endcase
     end
 endmodule
