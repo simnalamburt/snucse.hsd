@@ -48,67 +48,71 @@ module my_pectl #(
     localparam S_DONE        = 3'b101;
 
     reg [2:0] state;
-    reg [LOG2_DIM - 1:0] state_counter;
+    reg [LOG2_DIM - 1:0] state_counter, state_pe_load;
 
-    wire [LOG2_DIM - 1 + 3:0] next_all;
+    wire [2*LOG2_DIM + 3 - 1:0] next_all;
     wire [2:0] next_state;
-    wire [LOG2_DIM - 1:0] next_state_counter;
+    wire [LOG2_DIM - 1:0] next_state_counter, next_state_pe_load;
 
-    assign next_all = next(state, state_counter, aresetn, start, pe_ready);
-    assign next_state = next_all[2:0];
-    assign next_state_counter = next_all[LOG2_DIM - 1 + 3:3];
+    assign next_all = next(state, state_counter, state_pe_load, aresetn, start, pe_ready);
+    assign next_state = next_all[3 - 1:0];
+    assign next_state_counter = next_all[LOG2_DIM + 3 - 1:3];
+    assign next_state_pe_load = next_all[2*LOG2_DIM + 3 - 1:LOG2_DIM + 3];
 
-    function [LOG2_DIM - 1 + 3:0] next(
-        input [2:0] state, input [LOG2_DIM - 1:0] state_counter,
+    function [2*LOG2_DIM + 3 - 1:0] next(
+        input [2:0] state,
+        input [LOG2_DIM - 1:0] state_counter, state_pe_load,
         input aresetn, start, pe_ready
     );
         if (!aresetn) begin
-            next = {{LOG2_DIM{1'b0}}, S_IDLE};
+            next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_IDLE};
         end else begin
             case (state)
                 S_IDLE: begin
                     if (!start) begin
-                        next = {{LOG2_DIM{1'b0}}, S_IDLE};
+                        next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_IDLE};
                     end else begin
-                        next = {{LOG2_DIM{1'b0}}, S_LOAD_PE};
+                        next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_LOAD_PE};
                     end
                 end
                 S_LOAD_PE: begin
                     if (state_counter < (1<<LOG2_DIM) - 1) begin
-                        next = {state_counter + 1, S_LOAD_PE};
+                        next = {state_pe_load, state_counter + 1'b1, S_LOAD_PE};
+                    end else if (state_pe_load < (1<<LOG2_DIM) - 1) begin
+                        next = {state_pe_load + 1, {LOG2_DIM{1'b0}}, S_LOAD_PE};
                     end else begin
-                        next = {{LOG2_DIM{1'b0}}, S_LOAD_SHARED};
+                        next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_LOAD_SHARED};
                     end
                 end
                 S_LOAD_SHARED: begin
                     if (state_counter < (1<<LOG2_DIM) - 1) begin
-                        next = {state_counter + 1, S_LOAD_SHARED};
+                        next = {{LOG2_DIM{1'b0}}, state_counter + 1, S_LOAD_SHARED};
                     end else begin
-                        next = {{LOG2_DIM{1'b0}}, S_CALC_READY};
+                        next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_CALC_READY};
                     end
                 end
                 S_CALC_READY: begin
-                    next = {state_counter, S_CALC_WAIT};
+                    next = {{LOG2_DIM{1'b0}}, state_counter, S_CALC_WAIT};
                 end
                 S_CALC_WAIT: begin
                     if (!pe_ready) begin
-                        next = {state_counter, S_CALC_WAIT};
+                        next = {{LOG2_DIM{1'b0}}, state_counter, S_CALC_WAIT};
                     end else if (state_counter < (1<<LOG2_DIM) - 1) begin
-                        next = {state_counter + 1, S_CALC_READY};
+                        next = {{LOG2_DIM{1'b0}}, state_counter + 1, S_CALC_READY};
                     end else begin
-                        next = {{LOG2_DIM{1'b0}}, S_DONE};
+                        next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_DONE};
                     end
                 end
                 S_DONE: begin
                     if (state_counter < 5) begin
-                        next = {state_counter + 1, S_DONE};
+                        next = {{LOG2_DIM{1'b0}}, state_counter + 1, S_DONE};
                     end else begin
-                        next = {{LOG2_DIM{1'b0}}, S_IDLE};
+                        next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_IDLE};
                     end
                 end
                 default: begin
                     // NOTE: Error!
-                    next = {{LOG2_DIM{1'b0}}, S_IDLE};
+                    next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_IDLE};
                 end
             endcase
         end
@@ -118,29 +122,31 @@ module my_pectl #(
     //
     // PE
     //
+    wire pe_aresetn;
     reg [31:0] pe_ain, pe_din;
     reg [LOG2_DIM-1:0] pe_addr;
-    reg pe_we, pe_valid;
+    reg [(1<<LOG2_DIM)-1:0]pe_we;
+    reg pe_valid;
     wire [LOG2_DIM-1:0] pe_dvalid;
 
     // NOTE: Clock has been negated to avoid timing issue
     // TODO: generate 문으로 바꾸기
-    my_pe pe0(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h0]), .dout(wrdata0));
-    my_pe pe1(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h1]), .dout(wrdata1));
-    my_pe pe2(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h2]), .dout(wrdata2));
-    my_pe pe3(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h3]), .dout(wrdata3));
-    my_pe pe4(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h4]), .dout(wrdata4));
-    my_pe pe5(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h5]), .dout(wrdata5));
-    my_pe pe6(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h6]), .dout(wrdata6));
-    my_pe pe7(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h7]), .dout(wrdata7));
-    my_pe pe8(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h8]), .dout(wrdata8));
-    my_pe pe9(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h9]), .dout(wrdata9));
-    my_pe peA(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hA]), .dout(wrdataA));
-    my_pe peB(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hB]), .dout(wrdataB));
-    my_pe peC(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hC]), .dout(wrdataC));
-    my_pe peD(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hD]), .dout(wrdataD));
-    my_pe peE(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hE]), .dout(wrdataE));
-    my_pe peF(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hF]), .dout(wrdataF));
+    my_pe pe0(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h0]), .valid(pe_valid), .dvalid(pe_dvalid['h0]), .dout(wrdata0));
+    my_pe pe1(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h1]), .valid(pe_valid), .dvalid(pe_dvalid['h1]), .dout(wrdata1));
+    my_pe pe2(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h2]), .valid(pe_valid), .dvalid(pe_dvalid['h2]), .dout(wrdata2));
+    my_pe pe3(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h3]), .valid(pe_valid), .dvalid(pe_dvalid['h3]), .dout(wrdata3));
+    my_pe pe4(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h4]), .valid(pe_valid), .dvalid(pe_dvalid['h4]), .dout(wrdata4));
+    my_pe pe5(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h5]), .valid(pe_valid), .dvalid(pe_dvalid['h5]), .dout(wrdata5));
+    my_pe pe6(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h6]), .valid(pe_valid), .dvalid(pe_dvalid['h6]), .dout(wrdata6));
+    my_pe pe7(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h7]), .valid(pe_valid), .dvalid(pe_dvalid['h7]), .dout(wrdata7));
+    my_pe pe8(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h8]), .valid(pe_valid), .dvalid(pe_dvalid['h8]), .dout(wrdata8));
+    my_pe pe9(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['h9]), .valid(pe_valid), .dvalid(pe_dvalid['h9]), .dout(wrdata9));
+    my_pe peA(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['hA]), .valid(pe_valid), .dvalid(pe_dvalid['hA]), .dout(wrdataA));
+    my_pe peB(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['hB]), .valid(pe_valid), .dvalid(pe_dvalid['hB]), .dout(wrdataB));
+    my_pe peC(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['hC]), .valid(pe_valid), .dvalid(pe_dvalid['hC]), .dout(wrdataC));
+    my_pe peD(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['hD]), .valid(pe_valid), .dvalid(pe_dvalid['hD]), .dout(wrdataD));
+    my_pe peE(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['hE]), .valid(pe_valid), .dvalid(pe_dvalid['hE]), .dout(wrdataE));
+    my_pe peF(.aclk(~aclk), .aresetn(pe_aresetn), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we['hF]), .valid(pe_valid), .dvalid(pe_dvalid['hF]), .dout(wrdataF));
     defparam pe0.L_RAM_SIZE = LOG2_DIM;
     defparam pe1.L_RAM_SIZE = LOG2_DIM;
     defparam pe2.L_RAM_SIZE = LOG2_DIM;
@@ -168,6 +174,7 @@ module my_pectl #(
     //
     // Output
     //
+    assign pe_aresetn = aresetn && state != S_IDLE;
     assign done = state == S_DONE;
 
 
@@ -178,6 +185,7 @@ module my_pectl #(
         // Advance state
         state = next_state;
         state_counter = next_state_counter;
+        state_pe_load = next_state_pe_load;
 
         // TODO: output 결정하는 combinational logic 분리하기
         case (state)
@@ -188,7 +196,9 @@ module my_pectl #(
             S_LOAD_PE: begin
                 pe_din = rddata;
                 pe_addr = state_counter;
-                pe_we = 1;
+                pe_we = 0;
+                pe_we[state_pe_load] = 1;
+                // TODO: 더 빠르게 로딩할 수 없을까?
                 pe_valid = 0;
             end
             S_LOAD_SHARED: begin
@@ -218,9 +228,8 @@ module my_pectl #(
     //
     always @(negedge aclk) begin
         case (state)
-            S_LOAD_PE: rdaddr = state_counter + 1;
-            // S_LOAD_SHARED: rdaddr = (1<<(LOG2_DIM*2)) + state_counter + 1;
-            S_LOAD_SHARED: rdaddr = (1<<(LOG2_DIM)) + state_counter + 1;
+            S_LOAD_PE: rdaddr = (1<<(LOG2_DIM))*state_pe_load + state_counter + 1;
+            S_LOAD_SHARED: rdaddr = (1<<(LOG2_DIM*2)) + state_counter + 1;
             default: rdaddr = 0;
         endcase
     end
