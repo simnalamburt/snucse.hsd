@@ -25,7 +25,12 @@ module my_pectl #(
     output done,
 
     // If done == 1, wrdata means result of vector inner product
-    output [31:0] wrdata
+    // TODO: wrdata를 여러개 두지 말고 배열에다가 쓰는 방식으로 바꿔야함
+    output [31:0]
+        wrdata0, wrdata1, wrdata2, wrdata3,
+        wrdata4, wrdata5, wrdata6, wrdata7,
+        wrdata8, wrdata9, wrdataA, wrdataB,
+        wrdataC, wrdataD, wrdataE, wrdataF
 );
     //
     // Global BRAM
@@ -117,24 +122,47 @@ module my_pectl #(
     reg [31:0] pe_ain, pe_din;
     reg [LOG2_DIM-1:0] pe_addr;
     reg pe_we, pe_valid;
-    wire pe_dvalid;
-    my_pe PE(
-        .aclk(~aclk), // NOTE: Clock has been negated to avoid timing issue
-        .aresetn(aresetn && state != S_IDLE),
-        .ain(pe_ain),
-        .din(pe_din),
-        .addr(pe_addr),
-        .we(pe_we),
-        .valid(pe_valid),
-        .dvalid(pe_dvalid),
-        .dout(wrdata)
-    );
-    defparam PE.L_RAM_SIZE = LOG2_DIM;
+    wire [LOG2_DIM-1:0] pe_dvalid;
+
+    // NOTE: Clock has been negated to avoid timing issue
+    // TODO: generate 문으로 바꾸기
+    my_pe pe0(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h0]), .dout(wrdata0));
+    my_pe pe1(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h1]), .dout(wrdata1));
+    my_pe pe2(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h2]), .dout(wrdata2));
+    my_pe pe3(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h3]), .dout(wrdata3));
+    my_pe pe4(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h4]), .dout(wrdata4));
+    my_pe pe5(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h5]), .dout(wrdata5));
+    my_pe pe6(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h6]), .dout(wrdata6));
+    my_pe pe7(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h7]), .dout(wrdata7));
+    my_pe pe8(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h8]), .dout(wrdata8));
+    my_pe pe9(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['h9]), .dout(wrdata9));
+    my_pe peA(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hA]), .dout(wrdataA));
+    my_pe peB(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hB]), .dout(wrdataB));
+    my_pe peC(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hC]), .dout(wrdataC));
+    my_pe peD(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hD]), .dout(wrdataD));
+    my_pe peE(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hE]), .dout(wrdataE));
+    my_pe peF(.aclk(~aclk), .aresetn(aresetn && state != S_IDLE), .ain(pe_ain), .din(pe_din), .addr(pe_addr), .we(pe_we), .valid(pe_valid), .dvalid(pe_dvalid['hF]), .dout(wrdataF));
+    defparam pe0.L_RAM_SIZE = LOG2_DIM;
+    defparam pe1.L_RAM_SIZE = LOG2_DIM;
+    defparam pe2.L_RAM_SIZE = LOG2_DIM;
+    defparam pe3.L_RAM_SIZE = LOG2_DIM;
+    defparam pe4.L_RAM_SIZE = LOG2_DIM;
+    defparam pe5.L_RAM_SIZE = LOG2_DIM;
+    defparam pe6.L_RAM_SIZE = LOG2_DIM;
+    defparam pe7.L_RAM_SIZE = LOG2_DIM;
+    defparam pe8.L_RAM_SIZE = LOG2_DIM;
+    defparam pe9.L_RAM_SIZE = LOG2_DIM;
+    defparam peA.L_RAM_SIZE = LOG2_DIM;
+    defparam peB.L_RAM_SIZE = LOG2_DIM;
+    defparam peC.L_RAM_SIZE = LOG2_DIM;
+    defparam peD.L_RAM_SIZE = LOG2_DIM;
+    defparam peE.L_RAM_SIZE = LOG2_DIM;
+    defparam peF.L_RAM_SIZE = LOG2_DIM;
 
     // pe_ready: Is PE ready for next MAC input?
     reg pe_ready;
     always @(negedge aclk) begin
-        pe_ready = pe_dvalid;
+        pe_ready = &pe_dvalid;
     end
 
 
