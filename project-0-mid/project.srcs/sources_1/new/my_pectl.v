@@ -21,15 +21,7 @@ module my_pectl #(
     input [31:0] rddata,
 
     // done == 1 if and only if internal state is S_DONE
-    output done,
-
-    // If done == 1, wrdata means result of vector inner product
-    // TODO: wrdata를 여러개 두지 말고 배열에다가 쓰는 방식으로 바꿔야함
-    output [31:0]
-        wrdata0, wrdata1, wrdata2, wrdata3,
-        wrdata4, wrdata5, wrdata6, wrdata7,
-        wrdata8, wrdata9, wrdataA, wrdataB,
-        wrdataC, wrdataD, wrdataE, wrdataF
+    output done
 );
     //
     // Global BRAM
@@ -45,7 +37,8 @@ module my_pectl #(
     localparam S_LOAD_SHARED = 3'b010;
     localparam S_CALC_READY  = 3'b011;
     localparam S_CALC_WAIT   = 3'b100;
-    localparam S_DONE        = 3'b101;
+    localparam S_STORE       = 3'b101;
+    localparam S_DONE        = 3'b110;
 
     reg [2:0] state;
     reg [LOG2_DIM - 1:0] state_counter, state_pe_load;
@@ -100,6 +93,13 @@ module my_pectl #(
                     end else if (state_counter < (1<<LOG2_DIM) - 1) begin
                         next = {{LOG2_DIM{1'b0}}, state_counter + 1, S_CALC_READY};
                     end else begin
+                        next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_STORE};
+                    end
+                end
+                S_STORE: begin
+                    if (state_counter < (1<<LOG2_DIM) - 1) begin
+                        next = {{LOG2_DIM{1'b0}}, state_counter + 1, S_STORE};
+                    end else begin
                         next = {{LOG2_DIM{1'b0}}, {LOG2_DIM{1'b0}}, S_DONE};
                     end
                 end
@@ -125,34 +125,16 @@ module my_pectl #(
     wire pe_aresetn;
     reg [31:0] pe_ain, pe_din;
     reg [LOG2_DIM-1:0] pe_addr;
-    reg [(1<<LOG2_DIM)-1:0] pe_we;
+    reg [LOG2_DIM-1:0] pe_we;
     reg pe_valid;
     wire [LOG2_DIM-1:0] pe_dvalid;
-
-    // TODO: wrdata를 여러개 두지 말고 배열에다가 쓰는 방식으로 바꿔야함
     wire [31:0] wrdata [(1<<LOG2_DIM)-1:0];
-    assign wrdata0 = wrdata['h0];
-    assign wrdata1 = wrdata['h1];
-    assign wrdata2 = wrdata['h2];
-    assign wrdata3 = wrdata['h3];
-    assign wrdata4 = wrdata['h4];
-    assign wrdata5 = wrdata['h5];
-    assign wrdata6 = wrdata['h6];
-    assign wrdata7 = wrdata['h7];
-    assign wrdata8 = wrdata['h8];
-    assign wrdata9 = wrdata['h9];
-    assign wrdataA = wrdata['hA];
-    assign wrdataB = wrdata['hB];
-    assign wrdataC = wrdata['hC];
-    assign wrdataD = wrdata['hD];
-    assign wrdataE = wrdata['hE];
-    assign wrdataF = wrdata['hF];
 
-    // NOTE: Clock has been negated to avoid timing issue
     genvar i;
     generate
         for (i = 0; i < 1<<LOG2_DIM; i = i+1) begin
             my_pe #(.L_RAM_SIZE(LOG2_DIM)) pe(
+                // NOTE: Clock has been negated to avoid timing issue
                 .aclk(~aclk),
                 .aresetn(pe_aresetn),
                 .ain(pe_ain),
@@ -191,16 +173,12 @@ module my_pectl #(
 
         // TODO: output 결정하는 combinational logic 분리하기
         case (state)
-            S_IDLE: begin
-                pe_we = 0;
-                pe_valid = 0;
-            end
             S_LOAD_PE: begin
+                // TODO: 더 빠르게 로딩할 수 없을까?
                 pe_din = rddata;
                 pe_addr = state_counter;
                 pe_we = 0;
                 pe_we[state_pe_load] = 1;
-                // TODO: 더 빠르게 로딩할 수 없을까?
                 pe_valid = 0;
             end
             S_LOAD_SHARED: begin
@@ -214,11 +192,10 @@ module my_pectl #(
                 pe_we = 0;
                 pe_valid = 1;
             end
-            S_CALC_WAIT: begin
-                pe_we = 0;
-                pe_valid = 0;
+            S_STORE: begin
+                // TODO: Store the output
             end
-            S_DONE: begin
+            default: begin
                 pe_we = 0;
                 pe_valid = 0;
             end
