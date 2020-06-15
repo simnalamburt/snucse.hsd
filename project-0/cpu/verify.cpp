@@ -4,7 +4,7 @@
 
 int main(void)
 {
-  printf("program start");
+  printf("program start\n");
   // input vector size M
   // output vector size N
   // matix size M x N
@@ -34,10 +34,10 @@ int main(void)
   dev.largeMV(mat, input, output_fpga, M, N);
 
   // display
-  printf("%-10s%-10s%-10s\n", "index", "CPU", "FPGA");
+  printf("%-10s%-10s%-10s%-10s\n", "index", "CPU", "FPGA", "diff");
   for (int i = 0; i < N; i++)
   {
-    printf("%-10d%-10f%-10f%\n", i, output[i], output_fpga[i]);
+    printf("%-10d%-10f%-10f%-10f\n", i, output[i], output_fpga[i], output_fpga[i] - output[i]);
   }
 
   delete[] flat;
