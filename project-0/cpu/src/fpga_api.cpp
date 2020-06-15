@@ -43,23 +43,22 @@ const float* __attribute__((optimize("O0"))) FPGA::run()
 }
 
 // Test code for bitstream
-void FPGA::largeMV(const float* large_mat, const float* input,
-    float* output, int M, int N)
+void FPGA::largeMV(const float* large_mat, const float* input, float* output, int num_input, int num_output)
 {
-  // 0) Initialize output vector
-  for(int m = 0; m < N ; ++m)
-    output[m] = 0;
-
   float* vec = this->vector();
   float* mat = this->matrix();
 
-  for(int n = 0; n < N ; n += SIZE)
+  // 0) Initialize output vector
+  for(int i = 0; i < num_output ; ++i)
+    output[i] = 0;
+
+  for(int i = 0; i < num_output ; i += SIZE)
   {
-    for(int m = 0; m < M ; m += SIZE)
+    for(int j = 0; j < num_input ; j += SIZE)
     {
       // 0) Initialize input vector
-      int n_remain = min(SIZE, N-n);
-      int m_remain = min(SIZE, M-m);
+      int n_remain = min(SIZE, num_output-i);
+      int m_remain = min(SIZE, num_input-j);
 
       // 1) Assign a vector
       // IMPLEMENT THIS
@@ -71,8 +70,8 @@ void FPGA::largeMV(const float* large_mat, const float* input,
       const float* rst = this->run();
 
       // 4) Accumulate intermediate results
-      for(int nn = 0; nn < n_remain; ++nn)
-        output[n + nn] += rst[nn];
+      for(int row = 0; row < n_remain; ++row)
+        output[i + row] += rst[row];
     }
   }
 }
