@@ -6,8 +6,13 @@
 
 #define SIZE 4
 
-int main(int argc, char** argv)
-{
+void dump(int *fpga_bram) {
+  printf("%-10s%-10s\n", "addr", "FPGA");
+  for (i = 0; i < SIZE * 2; i++)
+    printf("%-10d%-10d\n", i, *(fpga_bram + i));
+}
+
+int main(int argc, char** argv) {
   int i;
 
   int foo = open("/dev/mem", O_RDWR | O_NONBLOCK);
@@ -16,22 +21,17 @@ int main(int argc, char** argv)
 
   // initialize memory
   for (i = 0; i < SIZE; i++)
-    *(fpga_bram + i) = (float) (i * 2); 
+    *(fpga_bram + i) = (float) (i * 2);
   for (i = SIZE; i < SIZE * 2; i++)
-    *(fpga_bram + i) = 0.0f; 
+    *(fpga_bram + i) = 0.0f;
 
-  printf("%-10s%-10s\n", "addr", "FPGA(hex)");
-  for (i = 0; i < SIZE * 2; i++)
-    printf("%-10d%-10X\n", i, *(fpga_bram + i));
+  dump(fpga_bram);
 
   // run ip
   *(fpga_ip) = 0x5555;
   while (*fpga_ip == 0x5555);
 
-  printf("%-10s%-10s\n", "addr", "FPGA(hex)");
-  for (i = 0; i < SIZE * 2; i++)
-    printf("%-10d%-10X\n", i, *(fpga_bram + i));
+  dump(fpga_bram);
 
   return 0;
 }
-
