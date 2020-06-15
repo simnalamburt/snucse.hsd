@@ -36,8 +36,24 @@ float* FPGA::vector(void)
 
 const float* __attribute__((optimize("O0"))) FPGA::run()
 {
-  *api_ = 0x5555;
-  while(*api_ == 0x5555);
+  // TODO: Implement me
+  // *api_ = 0x5555;
+  // while(*api_ == 0x5555);
+
+  // TODO: Remove me
+  float *vec = this->vector();
+  float *mat = this->matrix();
+  float *out = new float[SIZE];
+  for (int i = 0; i < SIZE; ++i)
+  {
+    out[i] = 0;
+    for (int j = 0; j < SIZE; ++j)
+      out[i] += vec[j] * mat[SIZE * i + j];
+  }
+
+  for (int i = 0; i < SIZE; ++i)
+    data_[i] = out[i];
+  delete [] out;
 
   return data_;
 }
@@ -57,21 +73,37 @@ void FPGA::largeMV(const float* large_mat, const float* input, float* output, in
     for(int j = 0; j < num_input ; j += SIZE)
     {
       // 0) Initialize input vector
-      int n_remain = min(SIZE, num_output-i);
-      int m_remain = min(SIZE, num_input-j);
+      int block_row = min(SIZE, num_output - i);
+      int block_col = min(SIZE, num_input - j);
 
       // 1) Assign a vector
-      // IMPLEMENT THIS
+      int k = 0;
+      for (; k < block_col; ++k) { vec[k] = input[j + k]; }
+      for (; k < SIZE; ++k) { vec[k] = 0; }
 
       // 2) Assign a matrix
-      // IMPLEMENT THIS
+      int row = 0;
+      for (; row < block_row; ++row) {
+        int col = 0;
+        for (; col < block_col; ++col) {
+          mat[SIZE*row + col] = large_mat[num_input*(i + row) + j + col];
+        }
+        for (; col < SIZE; ++col) {
+          mat[SIZE*row + col] = 0;
+        }
+      }
+      for (; row < SIZE; ++row) {
+        for (int col = 0; col < SIZE; ++col) {
+          mat[SIZE*row + col] = 0;
+        }
+      }
 
       // 3) Call a function `run() to execute MV multiplication
-      const float* rst = this->run();
+      const float* ret = this->run();
 
       // 4) Accumulate intermediate results
-      for(int row = 0; row < n_remain; ++row)
-        output[i + row] += rst[row];
+      for (int row = 0; row < block_row; ++row)
+        output[i + row] += ret[row];
     }
   }
 }
