@@ -1,5 +1,6 @@
 #ifndef _COMMON_DNN_H_
 #define _COMMON_DNN_H_
+
 #include <string>
 #include <vector>
 #include <memory>
@@ -31,4 +32,5 @@ public:
   FPGA *getDev();
   int total_block_call();
 };
+
 #endif

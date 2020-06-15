@@ -1,5 +1,6 @@
 #ifndef _OPS_H_
 #define _OPS_H_
+
 #include <cassert>
 #include <fstream>
 #include <iostream>
@@ -136,4 +137,5 @@ struct FlattenOp : Op
     }
   }
 };
+
 #endif

@@ -13,28 +13,27 @@
 class FPGA
 {
 private:
-    int fd_;	
-    float* data_;
-    unsigned int* api_;
-	
+  int fd_;
+  float* data_;
+  unsigned int* api_;
+
 public:
-    FPGA(off_t data_addr, off_t api_addr);
-    ~FPGA();
-	
-	// return internal pointer for the data
-	float* matrix(void);
-	float* vector(void);
-	
-	// perform matrix multiplication and return output array pointer
-    const float* run();	
-	
-	// input vector size: M
-	// matrix size: N by M
-	// output vector size: N
-	// O = M * I
-	void largeMV(const float* mat, const float* input, 
-		float* output, int M, int N);    
+  FPGA(off_t data_addr, off_t api_addr);
+  ~FPGA();
+
+  // return internal pointer for the data
+  float* matrix(void);
+  float* vector(void);
+
+  // perform matrix multiplication and return output array pointer
+  const float* run();
+
+  // input vector size: M
+  // matrix size: N by M
+  // output vector size: N
+  // O = M * I
+  void largeMV(const float* mat, const float* input,
+    float* output, int M, int N);
 };
 
 #endif
-
