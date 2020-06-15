@@ -36,25 +36,8 @@ float* FPGA::vector(void)
 
 const float* __attribute__((optimize("O0"))) FPGA::run()
 {
-  // TODO: Implement me
-  // *api_ = 0x5555;
-  // while(*api_ == 0x5555);
-
-  // TODO: Remove me
-  float *vec = this->vector();
-  float *mat = this->matrix();
-  float *out = new float[SIZE];
-  for (int i = 0; i < SIZE; ++i)
-  {
-    out[i] = 0;
-    for (int j = 0; j < SIZE; ++j)
-      out[i] += vec[j] * mat[SIZE * i + j];
-  }
-
-  for (int i = 0; i < SIZE; ++i)
-    data_[i] = out[i];
-  delete [] out;
-
+  *api_ = 0x5555;
+  while(*api_ == 0x5555);
   return data_;
 }
 
