@@ -388,7 +388,7 @@ module myip_v1_0_S00_AXI #(
     wire [2:0] next_state = next_[2:0];
     wire [LOG2_DIM*2:0] next_counter = next_[LOG2_DIM*2 + 3:3];
 
-    function [LOG2_DIM*2:0] next(
+    function [LOG2_DIM*2 + 3:0] next(
         input [2:0] state,
         input [LOG2_DIM*2:0] counter,
         input S_AXI_ARESETN, start, pe_ready
@@ -472,7 +472,7 @@ module myip_v1_0_S00_AXI #(
             my_pe #(.L_RAM_SIZE(LOG2_DIM)) pe(
                 // NOTE: Clock has been negated to avoid timing issue
                 // TODO: Check if it works normally
-                .aclk(~S_AXI_ACLK),
+                .aclk(~BRAM_CLK),
                 .aresetn(pe_aresetn),
                 .ain(pe_ain),
                 .din(pe_din),
