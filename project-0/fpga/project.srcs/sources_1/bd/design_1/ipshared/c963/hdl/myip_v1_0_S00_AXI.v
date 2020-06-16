@@ -532,7 +532,8 @@ module myip_v1_0_S00_AXI #(
                 end
                 if (counter >= 2) begin
                     // Delayed vector read result
-                    vector[counter - 2] = 32'h40000000;
+                    // TODO: debug
+                    vector[counter - 2] = 32'h40000000; // BRAM_RDDATA;
                 end
             end
             S_LOAD_M: begin
@@ -543,9 +544,10 @@ module myip_v1_0_S00_AXI #(
                 end
                 if (counter >= 2) begin
                     // Delayed matrix read result
-                    pe_din = 32'h40400000;
-                    pe_addr = (counter - 2) & 13'b0000000111111;
-                    pe_we[((counter - 2) & 13'b0111111000000) >> 6] = 1;
+                    // TODO: debug
+                    pe_din = 32'h40400000; // BRAM_RDDATA;
+                    pe_addr = (counter - 2) & {LOG2_DIM{1'b1}};
+                    pe_we[(counter - 2) >> LOG2_DIM] = 1;
                 end
             end
             S_CALC_READY: begin
