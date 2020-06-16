@@ -11,140 +11,432 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="5464470550fs"></ZoomStartTime>
-      <ZoomEndTime time="5547570551fs"></ZoomEndTime>
-      <Cursor1Time time="5493151000fs"></Cursor1Time>
+      <ZoomStartTime time="3289510850fs"></ZoomStartTime>
+      <ZoomEndTime time="5859510851fs"></ZoomEndTime>
+      <Cursor1Time time="5645000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="142"></ValueColumnWidth>
+      <ValueColumnWidth column_width="134"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="5" />
-   <wvobject fp_name="group1019" type="group">
-      <obj_property name="label">testbench</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/my_pectl_tb/data" type="array">
-         <obj_property name="ElementShortName">data[0:287][31:0]</obj_property>
-         <obj_property name="ObjectShortName">data[0:287][31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/clk" type="logic">
-         <obj_property name="ElementShortName">clk</obj_property>
-         <obj_property name="ObjectShortName">clk</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/start" type="logic">
-         <obj_property name="ElementShortName">start</obj_property>
-         <obj_property name="ObjectShortName">start</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/reset" type="logic">
-         <obj_property name="ElementShortName">reset</obj_property>
-         <obj_property name="ObjectShortName">reset</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/done" type="logic">
-         <obj_property name="ElementShortName">done</obj_property>
-         <obj_property name="ObjectShortName">done</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/rdaddr" type="array">
-         <obj_property name="ElementShortName">rdaddr[8:0]</obj_property>
-         <obj_property name="ObjectShortName">rdaddr[8:0]</obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject fp_name="group1020" type="group">
-      <obj_property name="label">uut</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/my_pectl_tb/UUT/start" type="logic">
-         <obj_property name="ElementShortName">start</obj_property>
-         <obj_property name="ObjectShortName">start</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/aresetn" type="logic">
-         <obj_property name="ElementShortName">aresetn</obj_property>
-         <obj_property name="ObjectShortName">aresetn</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/rdaddr" type="array">
-         <obj_property name="ElementShortName">rdaddr[8:0]</obj_property>
-         <obj_property name="ObjectShortName">rdaddr[8:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/rddata" type="array">
-         <obj_property name="ElementShortName">rddata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">rddata[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/done" type="logic">
-         <obj_property name="ElementShortName">done</obj_property>
-         <obj_property name="ObjectShortName">done</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/global_bram" type="array">
-         <obj_property name="ElementShortName">global_bram[0:15][31:0]</obj_property>
-         <obj_property name="ObjectShortName">global_bram[0:15][31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/state" type="array">
-         <obj_property name="ElementShortName">state[2:0]</obj_property>
-         <obj_property name="ObjectShortName">state[2:0]</obj_property>
-         <obj_property name="CustomSignalColor">#FF0080</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/state_counter" type="array">
-         <obj_property name="ElementShortName">state_counter[3:0]</obj_property>
-         <obj_property name="ObjectShortName">state_counter[3:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/state_pe_load" type="array">
-         <obj_property name="ElementShortName">state_pe_load[3:0]</obj_property>
-         <obj_property name="ObjectShortName">state_pe_load[3:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/next_all" type="array">
-         <obj_property name="ElementShortName">next_all[10:0]</obj_property>
-         <obj_property name="ObjectShortName">next_all[10:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/next_state" type="array">
-         <obj_property name="ElementShortName">next_state[2:0]</obj_property>
-         <obj_property name="ObjectShortName">next_state[2:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/next_state_counter" type="array">
-         <obj_property name="ElementShortName">next_state_counter[3:0]</obj_property>
-         <obj_property name="ObjectShortName">next_state_counter[3:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/next_state_pe_load" type="array">
-         <obj_property name="ElementShortName">next_state_pe_load[3:0]</obj_property>
-         <obj_property name="ObjectShortName">next_state_pe_load[3:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/pe_aresetn" type="logic">
-         <obj_property name="ElementShortName">pe_aresetn</obj_property>
-         <obj_property name="ObjectShortName">pe_aresetn</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/pe_ain" type="array">
-         <obj_property name="ElementShortName">pe_ain[31:0]</obj_property>
-         <obj_property name="ObjectShortName">pe_ain[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/pe_din" type="array">
-         <obj_property name="ElementShortName">pe_din[31:0]</obj_property>
-         <obj_property name="ObjectShortName">pe_din[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/pe_addr" type="array">
-         <obj_property name="ElementShortName">pe_addr[3:0]</obj_property>
-         <obj_property name="ObjectShortName">pe_addr[3:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/pe_we" type="array">
-         <obj_property name="ElementShortName">pe_we[15:0]</obj_property>
-         <obj_property name="ObjectShortName">pe_we[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/pe_valid" type="logic">
-         <obj_property name="ElementShortName">pe_valid</obj_property>
-         <obj_property name="ObjectShortName">pe_valid</obj_property>
-      </wvobject>
-      <wvobject fp_name="/my_pectl_tb/UUT/pe_ready" type="logic">
-         <obj_property name="ElementShortName">pe_ready</obj_property>
-         <obj_property name="ObjectShortName">pe_ready</obj_property>
-      </wvobject>
+   <WVObjectSize size="45" />
+   <wvobject fp_name="/my_pectl_tb/UUT/start" type="logic">
+      <obj_property name="ElementShortName">start</obj_property>
+      <obj_property name="ObjectShortName">start</obj_property>
    </wvobject>
    <wvobject fp_name="/my_pectl_tb/UUT/aclk" type="logic">
       <obj_property name="ElementShortName">aclk</obj_property>
       <obj_property name="ObjectShortName">aclk</obj_property>
    </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/aresetn" type="logic">
+      <obj_property name="ElementShortName">aresetn</obj_property>
+      <obj_property name="ObjectShortName">aresetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/rdaddr" type="array">
+      <obj_property name="ElementShortName">rdaddr[8:0]</obj_property>
+      <obj_property name="ObjectShortName">rdaddr[8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/rddata" type="array">
+      <obj_property name="ElementShortName">rddata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rddata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/done" type="logic">
+      <obj_property name="ElementShortName">done</obj_property>
+      <obj_property name="ObjectShortName">done</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/S_AXI_ACLK" type="logic">
+      <obj_property name="ElementShortName">S_AXI_ACLK</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ACLK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/S_AXI_ARESETN" type="logic">
+      <obj_property name="ElementShortName">S_AXI_ARESETN</obj_property>
+      <obj_property name="ObjectShortName">S_AXI_ARESETN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_ADDR" type="array">
+      <obj_property name="ElementShortName">BRAM_ADDR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">BRAM_ADDR[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_CLK" type="logic">
+      <obj_property name="ElementShortName">BRAM_CLK</obj_property>
+      <obj_property name="ObjectShortName">BRAM_CLK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_WRDATA" type="array">
+      <obj_property name="ElementShortName">BRAM_WRDATA[31:0]</obj_property>
+      <obj_property name="ObjectShortName">BRAM_WRDATA[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_EN" type="logic">
+      <obj_property name="ElementShortName">BRAM_EN</obj_property>
+      <obj_property name="ObjectShortName">BRAM_EN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_RST" type="logic">
+      <obj_property name="ElementShortName">BRAM_RST</obj_property>
+      <obj_property name="ObjectShortName">BRAM_RST</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_WE" type="array">
+      <obj_property name="ElementShortName">BRAM_WE[3:0]</obj_property>
+      <obj_property name="ObjectShortName">BRAM_WE[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/counter" type="array">
+      <obj_property name="ElementShortName">counter[8:0]</obj_property>
+      <obj_property name="ObjectShortName">counter[8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/next_" type="array">
+      <obj_property name="ElementShortName">next_[11:0]</obj_property>
+      <obj_property name="ObjectShortName">next_[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/next_state" type="array">
+      <obj_property name="ElementShortName">next_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/next_counter" type="array">
+      <obj_property name="ElementShortName">next_counter[8:0]</obj_property>
+      <obj_property name="ObjectShortName">next_counter[8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/pe_aresetn" type="logic">
+      <obj_property name="ElementShortName">pe_aresetn</obj_property>
+      <obj_property name="ObjectShortName">pe_aresetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/pe_ain" type="array">
+      <obj_property name="ElementShortName">pe_ain[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pe_ain[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/pe_din" type="array">
+      <obj_property name="ElementShortName">pe_din[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pe_din[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/pe_addr" type="array">
+      <obj_property name="ElementShortName">pe_addr[3:0]</obj_property>
+      <obj_property name="ObjectShortName">pe_addr[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/pe_we" type="array">
+      <obj_property name="ElementShortName">pe_we[15:0]</obj_property>
+      <obj_property name="ObjectShortName">pe_we[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/pe_valid" type="logic">
+      <obj_property name="ElementShortName">pe_valid</obj_property>
+      <obj_property name="ObjectShortName">pe_valid</obj_property>
+   </wvobject>
    <wvobject fp_name="/my_pectl_tb/UUT/pe_dvalid" type="array">
       <obj_property name="ElementShortName">pe_dvalid[15:0]</obj_property>
       <obj_property name="ObjectShortName">pe_dvalid[15:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/state" type="array">
+      <obj_property name="ElementShortName">state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">state[2:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFA500</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
    <wvobject fp_name="/my_pectl_tb/UUT/wrdata" type="array">
       <obj_property name="ElementShortName">wrdata[15:0][31:0]</obj_property>
       <obj_property name="ObjectShortName">wrdata[15:0][31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[15]" type="array">
+         <obj_property name="ElementShortName">[15][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[15][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[14]" type="array">
+         <obj_property name="ElementShortName">[14][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[14][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[13]" type="array">
+         <obj_property name="ElementShortName">[13][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[13][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[12]" type="array">
+         <obj_property name="ElementShortName">[12][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[12][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[11]" type="array">
+         <obj_property name="ElementShortName">[11][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[11][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[10]" type="array">
+         <obj_property name="ElementShortName">[10][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[10][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[9]" type="array">
+         <obj_property name="ElementShortName">[9][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[9][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[8]" type="array">
+         <obj_property name="ElementShortName">[8][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[8][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[7]" type="array">
+         <obj_property name="ElementShortName">[7][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[7][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[6]" type="array">
+         <obj_property name="ElementShortName">[6][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[6][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[5]" type="array">
+         <obj_property name="ElementShortName">[5][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[5][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[4]" type="array">
+         <obj_property name="ElementShortName">[4][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[4][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[3]" type="array">
+         <obj_property name="ElementShortName">[3][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[2]" type="array">
+         <obj_property name="ElementShortName">[2][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[1]" type="array">
+         <obj_property name="ElementShortName">[1][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[0]" type="array">
+         <obj_property name="ElementShortName">[0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][31:0]</obj_property>
+         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">8</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[15]" type="array">
+         <obj_property name="ElementShortName">[15][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[15][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[14]" type="array">
+         <obj_property name="ElementShortName">[14][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[14][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[13]" type="array">
+         <obj_property name="ElementShortName">[13][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[13][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[12]" type="array">
+         <obj_property name="ElementShortName">[12][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[12][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[11]" type="array">
+         <obj_property name="ElementShortName">[11][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[11][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[10]" type="array">
+         <obj_property name="ElementShortName">[10][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[10][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[9]" type="array">
+         <obj_property name="ElementShortName">[9][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[9][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[8]" type="array">
+         <obj_property name="ElementShortName">[8][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[8][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[7]" type="array">
+         <obj_property name="ElementShortName">[7][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[7][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[6]" type="array">
+         <obj_property name="ElementShortName">[6][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[6][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[5]" type="array">
+         <obj_property name="ElementShortName">[5][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[5][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[4]" type="array">
+         <obj_property name="ElementShortName">[4][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[4][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[3]" type="array">
+         <obj_property name="ElementShortName">[3][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[2]" type="array">
+         <obj_property name="ElementShortName">[2][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[1]" type="array">
+         <obj_property name="ElementShortName">[1][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/my_pectl_tb/UUT/wrdata[0]" type="array">
+         <obj_property name="ElementShortName">[0][31:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/pe_ready" type="logic">
+      <obj_property name="ElementShortName">pe_ready</obj_property>
+      <obj_property name="ObjectShortName">pe_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/vector" type="array">
+      <obj_property name="ElementShortName">vector[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">vector[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/bram_en" type="logic">
+      <obj_property name="ElementShortName">bram_en</obj_property>
+      <obj_property name="ObjectShortName">bram_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/bram_addr" type="array">
+      <obj_property name="ElementShortName">bram_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">bram_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/bram_wrdata" type="array">
+      <obj_property name="ElementShortName">bram_wrdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">bram_wrdata[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/LOG2_DIM" type="array">
+      <obj_property name="ElementShortName">LOG2_DIM[31:0]</obj_property>
+      <obj_property name="ObjectShortName">LOG2_DIM[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/DIM" type="array">
+      <obj_property name="ElementShortName">DIM[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DIM[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/ZERO_CTR" type="array">
+      <obj_property name="ElementShortName">ZERO_CTR[8:0]</obj_property>
+      <obj_property name="ObjectShortName">ZERO_CTR[8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_ADDR_WIDTH" type="array">
+      <obj_property name="ElementShortName">BRAM_ADDR_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">BRAM_ADDR_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">BRAM_DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">BRAM_DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_WE_WIDTH" type="array">
+      <obj_property name="ElementShortName">BRAM_WE_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">BRAM_WE_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/S_IDLE" type="array">
+      <obj_property name="ElementShortName">S_IDLE[2:0]</obj_property>
+      <obj_property name="ObjectShortName">S_IDLE[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/S_LOAD_V" type="array">
+      <obj_property name="ElementShortName">S_LOAD_V[2:0]</obj_property>
+      <obj_property name="ObjectShortName">S_LOAD_V[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/S_LOAD_M" type="array">
+      <obj_property name="ElementShortName">S_LOAD_M[2:0]</obj_property>
+      <obj_property name="ObjectShortName">S_LOAD_M[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/S_CALC_READY" type="array">
+      <obj_property name="ElementShortName">S_CALC_READY[2:0]</obj_property>
+      <obj_property name="ObjectShortName">S_CALC_READY[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/S_CALC_WAIT" type="array">
+      <obj_property name="ElementShortName">S_CALC_WAIT[2:0]</obj_property>
+      <obj_property name="ObjectShortName">S_CALC_WAIT[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/S_STORE" type="array">
+      <obj_property name="ElementShortName">S_STORE[2:0]</obj_property>
+      <obj_property name="ObjectShortName">S_STORE[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/S_DONE" type="array">
+      <obj_property name="ElementShortName">S_DONE[2:0]</obj_property>
+      <obj_property name="ObjectShortName">S_DONE[2:0]</obj_property>
    </wvobject>
 </wave_config>
