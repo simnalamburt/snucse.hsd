@@ -6,3 +6,5 @@ Project V0
 - `users/`: My IP 관련 파일
 - `report.pdf`, `repotr.docs`: 보고서
 - `zynq.bit`: 빌드 결과물
+
+벤치마크는 `cpu/`나 `cpu-test/`로 하지 말고 `../lab-07/` 코드를 사용할것.
