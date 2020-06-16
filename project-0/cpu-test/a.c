@@ -22,12 +22,7 @@ int main(void) {
 
   // Run IP
   fpga_ip[0] = 0x5555;
-  for (int i = 0; fpga_ip[0] == 0x5555; ++i) {
-    if (i == 1000000) { i = 0; }
-    if (i != 0) { continue; }
-
-    printf("State: %d, Counter: %d\n", fpga_ip[1], fpga_ip[2]);
-  }
+  while (fpga_ip[0] == 0x5555);
 
   // Read output
   printf("result = {\n");
@@ -36,3 +31,18 @@ int main(void) {
   }
   printf("}\n");
 }
+
+// for (int i = 0; fpga_ip[0] == 0x5555; ++i) {
+//   if (i == 1000000) { i = 0; }
+//   if (i != 0) { continue; }
+//   printf("State: %d, Counter: %d\n", fpga_ip[1], fpga_ip[2]);
+// }
+
+// int max = 0;
+// for (;;) {
+//   int a = fpga_ip[2];
+//   if (a > max) {
+//     max = a;
+//     printf("%d\n", max);
+//   }
+// }
