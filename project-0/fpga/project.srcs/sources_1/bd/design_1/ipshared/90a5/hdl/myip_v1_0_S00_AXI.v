@@ -468,7 +468,7 @@ module myip_v1_0_S00_AXI #(
             my_pe #(.L_RAM_SIZE(LOG2_DIM)) pe(
                 // NOTE: Clock has been negated to avoid timing issue
                 // TODO: Check if it works normally
-                .aclk(~S_AXI_ACLK),
+                .aclk(~BRAM_CLK),
                 .aresetn(pe_aresetn),
                 .ain(pe_ain),
                 .din(pe_din),
@@ -511,6 +511,9 @@ module myip_v1_0_S00_AXI #(
         // Advance state
         state = next_state;
         counter = next_counter;
+        // TODO: debug
+        slv_reg1 = state;
+        slv_reg2 = counter;
 
         // TODO: Change to combinational logic
         pe_ain = 0;
