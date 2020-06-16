@@ -1,2 +1,2 @@
 all: a.c
-	gcc a.c
+	gcc -std=c99 a.c
