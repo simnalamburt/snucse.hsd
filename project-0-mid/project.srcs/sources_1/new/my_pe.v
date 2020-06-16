@@ -60,13 +60,11 @@ module my_pe #(
             // we == 1, `din` is stored to `peram[addr]`
             peram[addr] = din;
         end
-    end
 
-    always @(negedge aclk) begin
         if (dvalid) begin
             accum = fma_result;
         end
     end
 
-    assign dout = dvalid ? fma_result : accum;
+    assign dout = accum;
 endmodule

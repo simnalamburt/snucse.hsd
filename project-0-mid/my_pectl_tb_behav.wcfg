@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="5195940250fs"></ZoomStartTime>
-      <ZoomEndTime time="5452940251fs"></ZoomEndTime>
-      <Cursor1Time time="5387141000fs"></Cursor1Time>
+      <ZoomStartTime time="2631464550fs"></ZoomStartTime>
+      <ZoomEndTime time="3277964551fs"></ZoomEndTime>
+      <Cursor1Time time="5638103000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="134"></ValueColumnWidth>
+      <ValueColumnWidth column_width="126"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="59" />
    <wvobject fp_name="/my_pectl_tb/UUT/start" type="logic">
@@ -144,8 +144,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[15]" type="array">
          <obj_property name="ElementShortName">[15][31:0]</obj_property>
          <obj_property name="ObjectShortName">[15][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -154,8 +152,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[14]" type="array">
          <obj_property name="ElementShortName">[14][31:0]</obj_property>
          <obj_property name="ObjectShortName">[14][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -164,8 +160,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[13]" type="array">
          <obj_property name="ElementShortName">[13][31:0]</obj_property>
          <obj_property name="ObjectShortName">[13][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -174,8 +168,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[12]" type="array">
          <obj_property name="ElementShortName">[12][31:0]</obj_property>
          <obj_property name="ObjectShortName">[12][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -184,8 +176,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[11]" type="array">
          <obj_property name="ElementShortName">[11][31:0]</obj_property>
          <obj_property name="ObjectShortName">[11][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -194,8 +184,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[10]" type="array">
          <obj_property name="ElementShortName">[10][31:0]</obj_property>
          <obj_property name="ObjectShortName">[10][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -204,8 +192,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[9]" type="array">
          <obj_property name="ElementShortName">[9][31:0]</obj_property>
          <obj_property name="ObjectShortName">[9][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -214,8 +200,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[8]" type="array">
          <obj_property name="ElementShortName">[8][31:0]</obj_property>
          <obj_property name="ObjectShortName">[8][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -224,8 +208,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[7]" type="array">
          <obj_property name="ElementShortName">[7][31:0]</obj_property>
          <obj_property name="ObjectShortName">[7][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -234,8 +216,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[6]" type="array">
          <obj_property name="ElementShortName">[6][31:0]</obj_property>
          <obj_property name="ObjectShortName">[6][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -244,8 +224,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[5]" type="array">
          <obj_property name="ElementShortName">[5][31:0]</obj_property>
          <obj_property name="ObjectShortName">[5][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -254,8 +232,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[4]" type="array">
          <obj_property name="ElementShortName">[4][31:0]</obj_property>
          <obj_property name="ObjectShortName">[4][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -264,8 +240,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[3]" type="array">
          <obj_property name="ElementShortName">[3][31:0]</obj_property>
          <obj_property name="ObjectShortName">[3][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -274,8 +248,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[2]" type="array">
          <obj_property name="ElementShortName">[2][31:0]</obj_property>
          <obj_property name="ObjectShortName">[2][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -284,8 +256,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[1]" type="array">
          <obj_property name="ElementShortName">[1][31:0]</obj_property>
          <obj_property name="ObjectShortName">[1][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -294,8 +264,6 @@
       <wvobject fp_name="/my_pectl_tb/UUT/wrdata[0]" type="array">
          <obj_property name="ElementShortName">[0][31:0]</obj_property>
          <obj_property name="ObjectShortName">[0][31:0]</obj_property>
-         <obj_property name="CustomSignalColor">#00FFFF</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>

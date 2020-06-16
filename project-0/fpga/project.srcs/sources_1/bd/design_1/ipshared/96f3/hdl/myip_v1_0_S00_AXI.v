@@ -531,8 +531,7 @@ module myip_v1_0_S00_AXI #(
                 end
                 if (counter >= 2) begin
                     // Delayed vector read result
-                    // TODO: debug
-                    vector[counter - 2] = 32'h40000000; // BRAM_RDDATA;
+                    vector[counter - 2] = BRAM_RDDATA;
                 end
             end
             S_LOAD_M: begin
@@ -543,8 +542,7 @@ module myip_v1_0_S00_AXI #(
                 end
                 if (counter >= 2) begin
                     // Delayed matrix read result
-                    // TODO: debug
-                    pe_din = 32'h40400000; // BRAM_RDDATA;
+                    pe_din = BRAM_RDDATA;
                     pe_addr = (counter - 2) & {LOG2_DIM{1'b1}};
                     pe_we[(counter - 2) >> LOG2_DIM] = 1;
                 end
@@ -622,13 +620,11 @@ module my_pe #(
             // we == 1, `din` is stored to `peram[addr]`
             peram[addr] = din;
         end
-    end
 
-    always @(negedge aclk) begin
         if (dvalid) begin
             accum = fma_result;
         end
     end
 
-    assign dout = dvalid ? fma_result : accum;
+    assign dout = accum;
 endmodule
