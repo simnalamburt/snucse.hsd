@@ -397,7 +397,7 @@ module myip_v1_0_S00_AXI #(
                     if (!start) begin
                         next = {ZERO_CTR, S_IDLE};
                     end else begin
-                        next = {ZERO_CTR, S_LOAD_PE};
+                        next = {ZERO_CTR, S_LOAD_V};
                     end
                 end
                 S_LOAD_V: begin
@@ -446,7 +446,7 @@ module myip_v1_0_S00_AXI #(
     endfunction
 
     //
-    // Negative Clock
+    // Clock Wizard
     // NOTE: Clock has been negated to avoid timing issue
     //
     clk_wiz_0 u_clk_180 (.clk_out1(BRAM_CLK), .clk_in1(S_AXI_ACLK));
@@ -467,7 +467,8 @@ module myip_v1_0_S00_AXI #(
         for (i = 0; i < DIM; i = i+1) begin
             my_pe #(.L_RAM_SIZE(LOG2_DIM)) pe(
                 // NOTE: Clock has been negated to avoid timing issue
-                .aclk(BRAM_CLK),
+                // TODO: Check if it works normally
+                .aclk(~S_AXI_ACLK),
                 .aresetn(pe_aresetn),
                 .ain(pe_ain),
                 .din(pe_din),
@@ -482,7 +483,7 @@ module myip_v1_0_S00_AXI #(
 
     // pe_ready: Is PE ready for next MAC input?
     reg pe_ready;
-    always @(negedge aclk) begin
+    always @(negedge S_AXI_ACLK) begin
         pe_ready = &pe_dvalid;
     end
 
