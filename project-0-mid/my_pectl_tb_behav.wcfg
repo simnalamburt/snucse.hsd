@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="3289510850fs"></ZoomStartTime>
-      <ZoomEndTime time="5859510851fs"></ZoomEndTime>
-      <Cursor1Time time="5645000000fs"></Cursor1Time>
+      <ZoomStartTime time="5195940250fs"></ZoomStartTime>
+      <ZoomEndTime time="5452940251fs"></ZoomEndTime>
+      <Cursor1Time time="5387141000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
       <ValueColumnWidth column_width="134"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="45" />
+   <WVObjectSize size="59" />
    <wvobject fp_name="/my_pectl_tb/UUT/start" type="logic">
       <obj_property name="ElementShortName">start</obj_property>
       <obj_property name="ObjectShortName">start</obj_property>
@@ -56,10 +56,6 @@
       <obj_property name="ElementShortName">BRAM_ADDR[31:0]</obj_property>
       <obj_property name="ObjectShortName">BRAM_ADDR[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_CLK" type="logic">
-      <obj_property name="ElementShortName">BRAM_CLK</obj_property>
-      <obj_property name="ObjectShortName">BRAM_CLK</obj_property>
-   </wvobject>
    <wvobject fp_name="/my_pectl_tb/UUT/BRAM_WRDATA" type="array">
       <obj_property name="ElementShortName">BRAM_WRDATA[31:0]</obj_property>
       <obj_property name="ObjectShortName">BRAM_WRDATA[31:0]</obj_property>
@@ -75,6 +71,9 @@
    <wvobject fp_name="/my_pectl_tb/UUT/BRAM_WE" type="array">
       <obj_property name="ElementShortName">BRAM_WE[3:0]</obj_property>
       <obj_property name="ObjectShortName">BRAM_WE[3:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/my_pectl_tb/UUT/counter" type="array">
       <obj_property name="ElementShortName">counter[8:0]</obj_property>
@@ -115,6 +114,8 @@
    <wvobject fp_name="/my_pectl_tb/UUT/pe_valid" type="logic">
       <obj_property name="ElementShortName">pe_valid</obj_property>
       <obj_property name="ObjectShortName">pe_valid</obj_property>
+      <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="/my_pectl_tb/UUT/pe_dvalid" type="array">
       <obj_property name="ElementShortName">pe_dvalid[15:0]</obj_property>
@@ -125,6 +126,10 @@
       <obj_property name="ObjectShortName">state[2:0]</obj_property>
       <obj_property name="CustomSignalColor">#FFA500</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/BRAM_CLK" type="logic">
+      <obj_property name="ElementShortName">BRAM_CLK</obj_property>
+      <obj_property name="ObjectShortName">BRAM_CLK</obj_property>
    </wvobject>
    <wvobject fp_name="/my_pectl_tb/UUT/wrdata" type="array">
       <obj_property name="ElementShortName">wrdata[15:0][31:0]</obj_property>
@@ -364,6 +369,8 @@
    <wvobject fp_name="/my_pectl_tb/UUT/pe_ready" type="logic">
       <obj_property name="ElementShortName">pe_ready</obj_property>
       <obj_property name="ObjectShortName">pe_ready</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="/my_pectl_tb/UUT/vector" type="array">
       <obj_property name="ElementShortName">vector[0:15][31:0]</obj_property>
@@ -438,5 +445,59 @@
    <wvobject fp_name="/my_pectl_tb/UUT/S_DONE" type="array">
       <obj_property name="ElementShortName">S_DONE[2:0]</obj_property>
       <obj_property name="ObjectShortName">S_DONE[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider276">
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /aclk" type="logic">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /aresetn" type="logic">
+      <obj_property name="ElementShortName">aresetn</obj_property>
+      <obj_property name="ObjectShortName">aresetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /ain" type="array">
+      <obj_property name="ElementShortName">ain[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ain[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /din" type="array">
+      <obj_property name="ElementShortName">din[31:0]</obj_property>
+      <obj_property name="ObjectShortName">din[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /addr" type="array">
+      <obj_property name="ElementShortName">addr[3:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /we" type="logic">
+      <obj_property name="ElementShortName">we</obj_property>
+      <obj_property name="ObjectShortName">we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /valid" type="logic">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /dvalid" type="logic">
+      <obj_property name="ElementShortName">dvalid</obj_property>
+      <obj_property name="ObjectShortName">dvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /dout" type="array">
+      <obj_property name="ElementShortName">dout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /peram" type="array">
+      <obj_property name="ElementShortName">peram[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">peram[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /accum" type="array">
+      <obj_property name="ElementShortName">accum[31:0]</obj_property>
+      <obj_property name="ObjectShortName">accum[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /fma_result" type="array">
+      <obj_property name="ElementShortName">fma_result[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fma_result[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/my_pectl_tb/UUT/\genblk1[0].pe /L_RAM_SIZE" type="array">
+      <obj_property name="ElementShortName">L_RAM_SIZE[31:0]</obj_property>
+      <obj_property name="ObjectShortName">L_RAM_SIZE[31:0]</obj_property>
    </wvobject>
 </wave_config>

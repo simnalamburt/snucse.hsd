@@ -469,8 +469,7 @@ module myip_v1_0_S00_AXI #(
     generate
         for (i = 0; i < DIM; i = i+1) begin
             my_pe #(.L_RAM_SIZE(LOG2_DIM)) pe(
-                // NOTE: Clock has been negated to avoid timing issue
-                .aclk(~BRAM_CLK),
+                .aclk(BRAM_CLK),
                 .aresetn(pe_aresetn),
                 .ain(pe_ain),
                 .din(pe_din),
