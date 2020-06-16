@@ -450,10 +450,9 @@ module myip_v1_0_S00_AXI #(
     endfunction
 
     //
-    // Clock Wizard
-    // NOTE: Clock has been negated to avoid timing issue
+    // Clock Wizard, filters clock
     //
-    clk_wiz_0 u_clk_180 (.clk_out1(BRAM_CLK), .clk_in1(S_AXI_ACLK));
+    clk_wiz_0 u_clk (.clk_out1(BRAM_CLK), .clk_in1(S_AXI_ACLK));
 
     //
     // PE
@@ -461,9 +460,9 @@ module myip_v1_0_S00_AXI #(
     wire pe_aresetn = S_AXI_ARESETN && state != S_IDLE;
     reg [31:0] pe_ain, pe_din;
     reg [LOG2_DIM-1:0] pe_addr;
-    reg [LOG2_DIM-1:0] pe_we;
+    reg [DIM-1:0] pe_we;
     wire pe_valid = state == S_CALC_READY;
-    wire [LOG2_DIM-1:0] pe_dvalid;
+    wire [DIM-1:0] pe_dvalid;
     wire [31:0] wrdata [DIM-1:0];
 
     genvar i;
@@ -471,7 +470,6 @@ module myip_v1_0_S00_AXI #(
         for (i = 0; i < DIM; i = i+1) begin
             my_pe #(.L_RAM_SIZE(LOG2_DIM)) pe(
                 // NOTE: Clock has been negated to avoid timing issue
-                // TODO: Check if it works normally
                 .aclk(~BRAM_CLK),
                 .aresetn(pe_aresetn),
                 .ain(pe_ain),
@@ -486,10 +484,8 @@ module myip_v1_0_S00_AXI #(
     endgenerate
 
     // pe_ready: Is PE ready for next MAC input?
-    reg pe_ready;
-    always @(negedge S_AXI_ACLK) begin
-        pe_ready = &pe_dvalid;
-    end
+    // Assume that all PEs are finished at the same time
+    wire pe_ready = pe_dvalid[0];
 
     //
     // Shared register
@@ -594,14 +590,14 @@ module my_pe #(
 
     // computation result
     // dvalid == 1, result data from MAC is valid
-    output reg dvalid,
-    output reg [31:0] dout
+    output dvalid,
+    output [31:0] dout
 );
     // local register
     (* ram_style = "block" *) reg [31:0] peram[0:2**L_RAM_SIZE - 1];
 
     // FMA (A*B + C)
-    wire fma_result_valid;
+    reg [31:0] accum;
     wire [31:0] fma_result;
     floating_point_0 FMA(
         .aclk(aclk),
@@ -611,15 +607,14 @@ module my_pe #(
         .s_axis_b_tvalid(valid),
         .s_axis_b_tdata(peram[addr]),
         .s_axis_c_tvalid(valid),
-        .s_axis_c_tdata(dout),
-        .m_axis_result_tvalid(fma_result_valid),
+        .s_axis_c_tdata(accum),
+        .m_axis_result_tvalid(dvalid),
         .m_axis_result_tdata(fma_result)
     );
 
     always @(posedge aclk) begin
         if (!aresetn) begin
-            dvalid = 0;
-            dout = 0;
+            accum = 0;
         end
 
         if (we) begin
@@ -629,7 +624,10 @@ module my_pe #(
     end
 
     always @(negedge aclk) begin
-        dvalid = fma_result_valid;
-        if (fma_result_valid) dout = fma_result;
+        if (dvalid) begin
+            accum = fma_result;
+        end
     end
+
+    assign dout = dvalid ? fma_result : accum;
 endmodule

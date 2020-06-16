@@ -29,14 +29,14 @@ module my_pe #(
 
     // computation result
     // dvalid == 1, result data from MAC is valid
-    output reg dvalid,
-    output reg [31:0] dout
+    output dvalid,
+    output [31:0] dout
 );
     // local register
     (* ram_style = "block" *) reg [31:0] peram[0:2**L_RAM_SIZE - 1];
 
     // FMA (A*B + C)
-    wire fma_result_valid;
+    reg [31:0] accum;
     wire [31:0] fma_result;
     floating_point_0 FMA(
         .aclk(aclk),
@@ -46,15 +46,14 @@ module my_pe #(
         .s_axis_b_tvalid(valid),
         .s_axis_b_tdata(peram[addr]),
         .s_axis_c_tvalid(valid),
-        .s_axis_c_tdata(dout),
-        .m_axis_result_tvalid(fma_result_valid),
+        .s_axis_c_tdata(accum),
+        .m_axis_result_tvalid(dvalid),
         .m_axis_result_tdata(fma_result)
     );
 
     always @(posedge aclk) begin
         if (!aresetn) begin
-            dvalid = 0;
-            dout = 0;
+            accum = 0;
         end
 
         if (we) begin
@@ -64,7 +63,10 @@ module my_pe #(
     end
 
     always @(negedge aclk) begin
-        dvalid = fma_result_valid;
-        if (fma_result_valid) dout = fma_result;
+        if (dvalid) begin
+            accum = fma_result;
+        end
     end
+
+    assign dout = dvalid ? fma_result : accum;
 endmodule

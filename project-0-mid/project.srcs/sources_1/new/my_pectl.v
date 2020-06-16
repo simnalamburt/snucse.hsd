@@ -125,9 +125,9 @@ module my_pectl #(
     wire pe_aresetn;
     reg [31:0] pe_ain, pe_din;
     reg [LOG2_DIM-1:0] pe_addr;
-    reg [LOG2_DIM-1:0] pe_we;
+    reg [(1<<LOG2_DIM)-1:0] pe_we;
     reg pe_valid;
-    wire [LOG2_DIM-1:0] pe_dvalid;
+    wire [(1<<LOG2_DIM)-1:0] pe_dvalid;
     wire [31:0] wrdata [(1<<LOG2_DIM)-1:0];
 
     genvar i;
@@ -194,6 +194,7 @@ module my_pectl #(
             end
             S_STORE: begin
                 // TODO: Store the output
+                global_bram[state_counter] = wrdata[state_counter];
             end
             default: begin
                 pe_we = 0;
