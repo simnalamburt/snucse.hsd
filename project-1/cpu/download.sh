@@ -1,8 +1,20 @@
 #!/bin/bash
+set -euo pipefail; IFS=$'\n\t'
 
-# the links below expire soon
-wget -O data/t10k-images.idx3-ubyte https://dl.dropbox.com/s/mdwy0kzf57nfl5f/t10k-images.idx3-ubyte
-wget -O data/t10k-labels.idx1-ubyte https://dl.dropbox.com/s/q6gmxa2euc2bv98/t10k-labels.idx1-ubyte
-wget -O pretrained_weights/mlp_iter_10000.caffemodel https://dl.dropbox.com/s/tsubzfrnuci6n5h/mlp_iter_10000.caffemodel
-wget -O pretrained_weights/cnn_weights.txt https://dl.dropbox.com/s/w9wga66reowm1fv/cnn_weights.txt
-wget -O pretrained_weights/quantized_cnn_weights.txt https://dl.dropbox.com/s/1le6smgy0hewln4/quantized_cnn_weights.txt
+if hash wget; then
+  wget 'http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz' -cO data/t10k-images.idx3-ubyte.gz
+  wget 'http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz' -cO data/t10k-labels.idx1-ubyte.gz
+elif hash curl; then
+  curl 'http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz' -LC- -o data/t10k-images.idx3-ubyte.gz
+  curl 'http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz' -LC- -o data/t10k-labels.idx1-ubyte.gz
+else
+  echo 'curl or wget is required'
+  exit 1
+fi
+
+sha256sum -c <<< "\
+8d422c7b0a1c1c79245a5bcf07fe86e33eeafee792b84584aec276f5a2dbc4e6  data/t10k-images.idx3-ubyte.gz
+f7ae60f92e00ec6debd23a6088c31dbd2371eca3ffa0defaefb259924204aec6  data/t10k-labels.idx1-ubyte.gz"
+
+gzip -dkf data/{t10k-images.idx3-ubyte,t10k-labels.idx1-ubyte}.gz
+xz -dkf pretrained_weights/cnn_weights.txt.xz pretrained_weights/quantized_cnn_weights.txt.xz

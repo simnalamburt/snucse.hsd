@@ -1,0 +1,11 @@
+# Downloaded Data
+/data/t10k-images.idx3-ubyte
+/data/t10k-labels.idx1-ubyte
+/pretrained_weights/cnn_weights.txt
+/pretrained_weights/quantized_cnn_weights.txt
+
+# Build results
+*.pyc
+/build/*.o
+/build/*.so
+/proto/caffe.pb.*
