@@ -48,7 +48,7 @@
 
 
 // IP VLNV: user.org:user:myip:1.0
-// IP Revision: 5
+// IP Revision: 6
 
 `timescale 1ns/1ps
 
@@ -98,7 +98,7 @@ output wire m00_bram_en;
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME m00_bram_rst, POLARITY ACTIVE_LOW, INSERT_VIP 0" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 m00_bram_rst RST, xilinx.com:interface:bram:1.0 m00_bram RST" *)
 output wire m00_bram_rst;
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME m00_bram, MEM_SIZE 8192, MEM_WIDTH 32, MEM_ECC NONE, MASTER_TYPE OTHER, READ_LATENCY 1" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME m00_bram, MEM_SIZE 8192, MEM_WIDTH 32, MEM_ECC NONE, READ_LATENCY 1" *)
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 m00_bram WE" *)
 output wire [3 : 0] m00_bram_we;
 (* X_INTERFACE_INFO = "xilinx.com:interface:aximm:1.0 S00_AXI AWADDR" *)

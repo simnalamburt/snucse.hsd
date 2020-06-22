@@ -184,11 +184,11 @@ proc create_root_design { parentCell } {
    CONFIG.Port_B_Enable_Rate {100} \
    CONFIG.Port_B_Write_Rate {50} \
    CONFIG.Register_PortA_Output_of_Memory_Primitives {false} \
-   CONFIG.Register_PortB_Output_of_Memory_Primitives {true} \
+   CONFIG.Register_PortB_Output_of_Memory_Primitives {false} \
    CONFIG.Use_Byte_Write_Enable {true} \
    CONFIG.Use_RSTA_Pin {true} \
    CONFIG.Use_RSTB_Pin {true} \
-   CONFIG.use_bram_block {Stand_Alone} \
+   CONFIG.use_bram_block {BRAM_Controller} \
  ] $blk_mem_gen_0
 
   # Create instance: myip_0, and set properties
