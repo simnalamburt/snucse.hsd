@@ -361,8 +361,8 @@ module myip_v1_0_S00_AXI #(
     //
     // User logic
     //
-    localparam DIM = 64;
-    localparam LOG2_DIM = 6; // 2**6 = 64
+    localparam LOG2_DIM = 6;
+    localparam DIM = 1<<LOG2_DIM;
     localparam ZERO_CTR = 13'b0;
 
     //
@@ -373,25 +373,28 @@ module myip_v1_0_S00_AXI #(
     //
     // FSM
     //
+    // TODO: S_LOAD_V, S_READ_M 사이의 사이클 낭비 줄이기
     localparam S_IDLE       = 3'd0;
     localparam S_LOAD_V     = 3'd1;
-    localparam S_LOAD_M     = 3'd2;
-    localparam S_CALC_READY = 3'd3;
-    localparam S_CALC_WAIT  = 3'd4;
-    localparam S_STORE      = 3'd5;
-    localparam S_DONE       = 3'd6;
+    localparam S_READ_M     = 3'd2;
+    localparam S_STORE      = 3'd3;
+    localparam S_DONE       = 3'd4;
 
     reg [2:0] state;
+    // TODO: counter의 0 비트가 무조건 0임, 아끼기
     reg [LOG2_DIM*2:0] counter;
+    wire [LOG2_DIM*2:0] read_counter = counter - 2;
+    wire [LOG2_DIM-1:0] read_col = read_counter[LOG2_DIM-1:0];
+    wire [LOG2_DIM-1:0] read_row = read_counter[LOG2_DIM*2-1:LOG2_DIM];
 
-    wire [LOG2_DIM*2 + 3:0] next_ = next(state, counter, S_AXI_ARESETN, start, pe_ready);
+    wire [LOG2_DIM*2 + 3:0] next_ = next(state, counter, S_AXI_ARESETN, start);
     wire [2:0] next_state = next_[2:0];
     wire [LOG2_DIM*2:0] next_counter = next_[LOG2_DIM*2 + 3:3];
 
     function [LOG2_DIM*2 + 3:0] next(
         input [2:0] state,
         input [LOG2_DIM*2:0] counter,
-        input S_AXI_ARESETN, start, pe_ready
+        input S_AXI_ARESETN, start
     );
         if ( S_AXI_ARESETN == 1'b0 ) begin
             next = {ZERO_CTR, S_IDLE};
@@ -406,34 +409,21 @@ module myip_v1_0_S00_AXI #(
                 end
                 S_LOAD_V: begin
                     if (counter < DIM + 2 - 1) begin
-                        next = {counter + 1, S_LOAD_V};
+                        next = {counter + 4, S_LOAD_V};
                     end else begin
-                        next = {ZERO_CTR, S_LOAD_M};
+                        next = {ZERO_CTR, S_READ_M};
                     end
                 end
-                S_LOAD_M: begin
+                S_READ_M: begin
                     if (counter < DIM*DIM + 2 - 1) begin
-                        next = {counter + 1, S_LOAD_M};
-                    end else begin
-                        next = {ZERO_CTR, S_CALC_READY};
-                    end
-                end
-                S_CALC_READY: begin
-                    next = {counter, S_CALC_WAIT};
-                end
-                S_CALC_WAIT: begin
-                    if (!pe_ready) begin
-                        // Not ready, hold state
-                        next = {counter, S_CALC_WAIT};
-                    end else if (counter < DIM - 1) begin
-                        next = {counter + 1, S_CALC_READY};
+                        next = {counter + 4, S_READ_M};
                     end else begin
                         next = {ZERO_CTR, S_STORE};
                     end
                 end
                 S_STORE: begin
                     if (counter < DIM - 1) begin
-                        next = {counter + 1, S_STORE};
+                        next = {counter + 2, S_STORE};
                     end else begin
                         next = {ZERO_CTR, S_DONE};
                     end
@@ -455,41 +445,10 @@ module myip_v1_0_S00_AXI #(
     clk_wiz_0 u_clk (.clk_out1(BRAM_CLK), .clk_in1(S_AXI_ACLK));
 
     //
-    // PE
+    // Memory
     //
-    wire pe_aresetn = S_AXI_ARESETN && state != S_IDLE;
-    reg [31:0] pe_ain, pe_din;
-    reg [LOG2_DIM-1:0] pe_addr;
-    reg [DIM-1:0] pe_we;
-    wire pe_valid = state == S_CALC_READY;
-    wire [DIM-1:0] pe_dvalid;
-    wire [31:0] wrdata [DIM-1:0];
-
-    genvar i;
-    generate
-        for (i = 0; i < DIM; i = i+1) begin
-            my_pe #(.L_RAM_SIZE(LOG2_DIM)) pe(
-                .aclk(BRAM_CLK),
-                .aresetn(pe_aresetn),
-                .ain(pe_ain),
-                .din(pe_din),
-                .addr(pe_addr),
-                .we(pe_we[i]),
-                .valid(pe_valid),
-                .dvalid(pe_dvalid[i]),
-                .dout(wrdata[i])
-            );
-        end
-    endgenerate
-
-    // pe_ready: Is PE ready for next MAC input?
-    // Assume that all PEs are finished at the same time
-    wire pe_ready = pe_dvalid[0];
-
-    //
-    // Shared register
-    //
-    reg [31:0] vector[0:DIM - 1];
+    reg [7:0] vector[0:DIM - 1];
+    reg [15:0] result[0:DIM - 1];
 
     //
     // Outputs
@@ -515,10 +474,6 @@ module myip_v1_0_S00_AXI #(
         slv_reg2 = counter;
 
         // TODO: Change to combinational logic
-        pe_ain = 0;
-        pe_din = 0;
-        pe_addr = 0;
-        pe_we = 0;
         bram_en = 0;
         bram_addr = 0;
         bram_wrdata = 0;
@@ -531,10 +486,13 @@ module myip_v1_0_S00_AXI #(
                 end
                 if (counter >= 2) begin
                     // Delayed vector read result
-                    vector[counter - 2] = BRAM_RDDATA;
+                    vector[read_counter + 0] = BRAM_RDDATA[ 7: 0];
+                    vector[read_counter + 1] = BRAM_RDDATA[15: 8];
+                    vector[read_counter + 3] = BRAM_RDDATA[23:16];
+                    vector[read_counter + 4] = BRAM_RDDATA[31:24];
                 end
             end
-            S_LOAD_M: begin
+            S_READ_M: begin
                 if (counter < DIM*DIM) begin
                     // Read matrix
                     bram_en = 1;
@@ -542,89 +500,20 @@ module myip_v1_0_S00_AXI #(
                 end
                 if (counter >= 2) begin
                     // Delayed matrix read result
-                    pe_din = BRAM_RDDATA;
-                    pe_addr = (counter - 2) & {LOG2_DIM{1'b1}};
-                    pe_we[(counter - 2) >> LOG2_DIM] = 1;
+                    result[read_row] = result[read_row] +
+                        vector[read_col + 0] * BRAM_RDDATA[ 7: 0] +
+                        vector[read_col + 1] * BRAM_RDDATA[15: 8] +
+                        vector[read_col + 3] * BRAM_RDDATA[23:16] +
+                        vector[read_col + 4] * BRAM_RDDATA[31:24];
                 end
-            end
-            S_CALC_READY: begin
-                // `pe_valid` is 1'b1 in here
-                pe_ain = vector[counter];
-                pe_addr = counter;
             end
             S_STORE: begin
                 // Store the calculation output
                 // `BRAM_WE` is 4'b1111 in here
                 bram_en = 1;
                 bram_addr = counter << 2;
-                bram_wrdata = wrdata[counter];
+                bram_wrdata = {result[counter + 1], result[counter]};
             end
         endcase
     end
-endmodule
-
-module my_pe #(
-    parameter L_RAM_SIZE = 6
-) (
-    // clock signal
-    input aclk,
-
-    // Negetive reset. aresetn == 0 means that reset is activated
-    input aresetn,
-
-    // port A, directly connected to MAC
-    input [31:0] ain,
-
-    // peram-> port B, connected to local register
-    input [31:0] din,
-    // Undefined behavior occurs if user reads uninitialized memory
-    input [L_RAM_SIZE-1:0] addr,
-    // we == 1, `din` is stored to `peram[addr]`
-    // we == 0, `peram[addr]` is assigned to one of inputs of MAC
-    input we,
-
-    // integrated valid signal
-    // valid == 1, MAC gets inputs from its input ports and starts computation
-    input valid,
-
-    // computation result
-    // dvalid == 1, result data from MAC is valid
-    output dvalid,
-    output [31:0] dout
-);
-    // local register
-    (* ram_style = "block" *) reg [31:0] peram[0:2**L_RAM_SIZE - 1];
-
-    // FMA (A*B + C)
-    reg [31:0] accum;
-    wire [31:0] fma_result;
-    floating_point_0 FMA(
-        .aclk(aclk),
-        .aresetn(aresetn),
-        .s_axis_a_tvalid(valid),
-        .s_axis_a_tdata(ain),
-        .s_axis_b_tvalid(valid),
-        .s_axis_b_tdata(peram[addr]),
-        .s_axis_c_tvalid(valid),
-        .s_axis_c_tdata(accum),
-        .m_axis_result_tvalid(dvalid),
-        .m_axis_result_tdata(fma_result)
-    );
-
-    always @(posedge aclk) begin
-        if (!aresetn) begin
-            accum = 0;
-        end
-
-        if (we) begin
-            // we == 1, `din` is stored to `peram[addr]`
-            peram[addr] = din;
-        end
-
-        if (dvalid) begin
-            accum = fma_result;
-        end
-    end
-
-    assign dout = accum;
 endmodule
