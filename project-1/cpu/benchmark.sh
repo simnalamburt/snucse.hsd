@@ -9,9 +9,9 @@
 #echo -e '\n=> Accuracy should be 1.0\n'
 
 # Lab12 - Quantization - Acc: 1.0
-sudo python eval.py --num_test_images 100 --m_size 64 --v_size 64 --network cnn --run_type cpu --quantized
+python eval.py --num_test_images 100 --m_size 64 --v_size 64 --network cnn --run_type cpu --quantized
 echo -e '\n=> Accuracy should be 1.0\n'
 
 # Project_v1
-sudo python eval.py --num_test_images 100 --m_size 64 --v_size 64 --network cnn --run_type fpga --quantized
-echo -e '\n=> Accuracy should be 1.0\n'
+#sudo python eval.py --num_test_images 100 --m_size 64 --v_size 64 --network cnn --run_type fpga --quantized
+#echo -e '\n=> Accuracy should be 1.0\n'

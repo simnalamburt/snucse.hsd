@@ -48,11 +48,11 @@ def main(args):
 
 
     print('[*] Run tests...')
-    test_images = [images[i, :, :].copy() for i in xrange(num_test_images)]
+    test_images = [images[i, :, :].copy() for i in range(num_test_images)]
     n_correct = 0
     start_time = time.time()
 
-    for i in xrange(num_test_images):
+    for i in range(num_test_images):
         X = test_images[i]
         X = X.reshape((28*28)) # 28x28->784
 
