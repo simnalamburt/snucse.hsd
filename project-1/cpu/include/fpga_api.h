@@ -19,7 +19,7 @@ private:
   int8_t *qvec_;
   int8_t *qmat_;
   short *qout_;
-  int *qdata_;
+  int8_t *qdata_;
 
   int m_size_;
   int v_size_;
@@ -33,14 +33,14 @@ public:
   // return internal pointer for the data
   float *matrix(void);
   float *vector(void);
-  int *qmatrix(void);
-  int *qvector(void);
+  int8_t *qmatrix(void);
+  int8_t *qvector(void);
   void reset(void);
   int num_block_call(void);
 
   // perform matrix multiplication and return output array pointer
   const float *blockMV(Compute* comp);
-  const int *qblockMV(Compute* comp);
+  const int16_t *qblockMV(Compute* comp);
 
   // Input vector size: num_input
   // Matrix size: num_output * num_input
