@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstring>
+#include <cmath>
 
 using namespace std;
 
@@ -13,8 +14,8 @@ FPGA::FPGA(off_t data_addr, off_t output_addr, int m_size, int v_size)
   v_size_ = v_size;
   data_size_ = (m_size_ + 1) * v_size_; // fpga bram data size
 
-  qvec_ = new char[v_size_];
-  qmat_ = new char[m_size_*v_size_];
+  qvec_ = new int8_t[v_size_];
+  qmat_ = new int8_t[m_size_*v_size_];
   qout_ = new short[m_size_];
 
   output_ = new unsigned int[m_size_]; // use output_ as tempolar output
@@ -52,19 +53,20 @@ int FPGA::num_block_call(void)
   return num_block_call_;
 }
 
-void quantize(float* input, char* quantized, int num_input, char bits_min, char bits_max, char offset, float scale)
+static void quantize(float* input, int8_t* quantized, int num_input, float scale)
 {
   for(int i = 0; i < num_input; i++)
   {
-    quantized[i] = 0; // TODO: convert floating point to quantized value
+    int16_t x = static_cast<int16_t>(ceilf(input[i] / scale));
+    quantized[i] = x > 127 ? 127 : x < -128 ? -128 : x;
   }
 }
 
-void dequantize(short* quantized, float* output, int num_output, char offset, float scale)
+static void dequantize(short* quantized, float* output, int num_output, float scale)
 {
   for(int i = 0; i < num_output; i++)
   {
-    output[i] = 0; // TODO: convert quantized value to floating point
+    output[i] = scale * static_cast<float>(quantized[i]);
   }
 }
 
@@ -79,28 +81,25 @@ const float *FPGA::blockMV(Compute* comp)
 
   if(comp->quantized)
   {
-    char act_bits_min = 0;
-    char act_bits_max = (1<<(comp->act_bits-1))-1;
+    // NOTE: We'll ignore comp->act_bits and comp->weight_bits variable and
+    // always quantize into 8bit signed integer
 
-    float act_scale = 0; // TODO calculate the scale factor
-    char act_offset = 0; // TODO calculate the zero-offset
-    quantize(vec, qvec_, v_size_, act_bits_min, act_bits_max, act_offset, act_scale);
+    float act_scale = (comp->act_max - comp->act_min)/127.0f;
+    float weight_scale = (comp->weight_max - comp->weight_min)/127.0f;
 
-    char weight_bits_min = 0;
-    char weight_bits_max = (1<<(comp->weight_bits-1))-1;
-
-    float weight_scale = 0; // TODO calculate the scale factor
-    char weight_offset = 0; // TODO calculate the zero-offset
-    quantize(mat, qmat_, m_size_*v_size_, weight_bits_min, weight_bits_max, weight_offset, weight_scale);
+    quantize(vec, qvec_, v_size_, act_scale);
+    quantize(mat, qmat_, m_size_*v_size_, weight_scale);
 
     for (int i = 0; i < m_size_; ++i)
     {
-      qout_[i] = 0;
+      short sum = 0;
+      // NOTE: Overflow may occurs here during accumulation, but we'll ignore it
       for (int j = 0; j < v_size_; ++j)
-        qout_[i] += (qvec_[j]-act_offset) * (qmat_[v_size_ * i + j]-weight_offset);
+        sum += qvec_[j] * qmat_[v_size_ * i + j];
+      qout_[i] = sum;
     }
 
-    dequantize(qout_, out, m_size_, 0, act_scale*weight_scale);
+    dequantize(qout_, out, m_size_, act_scale*weight_scale);
   }
   else
   {

@@ -16,8 +16,8 @@ private:
   int fd_;
   float *data_;
   unsigned int *output_;
-  char *qvec_;
-  char *qmat_;
+  int8_t *qvec_;
+  int8_t *qmat_;
   short *qout_;
   int *qdata_;
 

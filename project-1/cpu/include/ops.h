@@ -1,6 +1,7 @@
 #ifndef _OPS_H_
 #define _OPS_H_
 #include "compute.h"
+#include <cmath>
 #include <cassert>
 #include <fstream>
 #include <iostream>
