@@ -78,7 +78,6 @@ const int16_t *FPGA::qblockMV(Compute* comp)
 
 void FPGA::largeMV(const int8_t *large_mat, const float *input, float *output, int num_input, int num_output, Compute* comp)
 {
-  // TODO: large_mat is quantized already
   // TODO: Profiling and optimization
 
   int8_t *qvec = this->qvector();
