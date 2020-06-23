@@ -63,33 +63,15 @@ static void dequantize(int32_t* quantized, float* output, int num_output, float 
   }
 }
 
-const int16_t *__attribute__((optimize("O0"))) FPGA::qblockMV(Compute* comp)
+const int16_t *FPGA::qblockMV(Compute* comp)
 {
   num_block_call_ += 1;
 
   // fpga version
-  // TODO: Use volatile keyword, enable compiler optimization
-  *output_ = 0x5555;
-  while (*output_ == 0x5555)
-    ;
+  volatile uint32_t *ip_status = output_;
 
-  // NOTE: CPU equivalent code
-  //
-  // int8_t *qvec = this->qvector();
-  // int8_t *qmat = this->qmatrix();
-  // int16_t *qout = new int16_t[m_size_];
-  // int16_t *qresult = reinterpret_cast<int16_t *>(qdata_);
-  // for (int i = 0; i < m_size_; ++i) {
-  //   int16_t sum = 0;
-  //   for (int j = 0; j < v_size_; ++j) {
-  //     int16_t a = qvec[j];
-  //     int16_t b = qmat[v_size_*i + j];
-  //     sum += a * b;
-  //   }
-  //   qout[i] = sum;
-  // }
-  // for (int i = 0; i < m_size_; ++i) { qresult[i] = qout[i]; }
-  // delete[] qout;
+  *ip_status = 0x5555;
+  while (*ip_status == 0x5555);
 
   return reinterpret_cast<int16_t *>(qdata_);
 }
