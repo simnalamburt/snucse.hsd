@@ -3,6 +3,7 @@
 /data/t10k-labels.idx1-ubyte
 /pretrained_weights/cnn_weights.txt
 /pretrained_weights/quantized_cnn_weights.txt
+/pretrained_weights/quantized_cnn_weights_preprocessed.txt
 
 # Build results
 *.pyc

@@ -17,4 +17,7 @@ sha256sum -c <<< "\
 f7ae60f92e00ec6debd23a6088c31dbd2371eca3ffa0defaefb259924204aec6  data/t10k-labels.idx1-ubyte.gz"
 
 gzip -dkf data/{t10k-images.idx3-ubyte,t10k-labels.idx1-ubyte}.gz
-xz -dkf pretrained_weights/cnn_weights.txt.xz pretrained_weights/quantized_cnn_weights.txt.xz
+xz -dkf \
+  pretrained_weights/cnn_weights.txt.xz \
+  pretrained_weights/quantized_cnn_weights.txt.xz \
+  pretrained_weights/quantized_cnn_weights_preprocessed.txt
