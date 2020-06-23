@@ -16,7 +16,7 @@ FPGA::FPGA(off_t data_addr, off_t output_addr, int m_size, int v_size)
 
   qvec_ = new int8_t[v_size_];
   qmat_ = new int8_t[m_size_*v_size_];
-  qout_ = new short[m_size_];
+  qout_ = new int32_t[m_size_];
 
   output_ = new unsigned int[m_size_]; // use output_ as tempolar output
   data_ = new float[data_size_];
@@ -62,7 +62,7 @@ static void quantize(float* input, int8_t* quantized, int num_input, float scale
   }
 }
 
-static void dequantize(short* quantized, float* output, int num_output, float scale)
+static void dequantize(int32_t* quantized, float* output, int num_output, float scale)
 {
   for(int i = 0; i < num_output; i++)
   {

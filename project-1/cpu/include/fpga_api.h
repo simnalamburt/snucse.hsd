@@ -18,7 +18,7 @@ private:
   unsigned int *output_;
   int8_t *qvec_;
   int8_t *qmat_;
-  short *qout_;
+  int32_t *qout_;
   int8_t *qdata_;
 
   int m_size_;
