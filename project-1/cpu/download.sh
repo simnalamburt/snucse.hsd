@@ -20,4 +20,4 @@ gzip -dkf data/{t10k-images.idx3-ubyte,t10k-labels.idx1-ubyte}.gz
 xz -dkf \
   pretrained_weights/cnn_weights.txt.xz \
   pretrained_weights/quantized_cnn_weights.txt.xz \
-  pretrained_weights/quantized_cnn_weights_preprocessed.txt
+  pretrained_weights/quantized_cnn_weights_preprocessed.txt.xz
