@@ -34,16 +34,14 @@ def main(args):
 
     print('[*] Load the network...')
     if args.network == 'mlp': # Lab 2
-        if args.quantized:
-            print('[!] MLP does not support quantization')
-            return
-        model_path = os.path.join('./pretrained_weights', 'mlp_iter_10000.caffemodel')
-        net = MLP(model_path, args)
+        print('[!] This project requires quantization, MLP does not support quantization')
+        return
     elif args.network == 'cnn':
         if args.quantized: # Lab 14
-            model_path = os.path.join('./pretrained_weights', 'quantized_cnn_weights.txt')
+            model_path = os.path.join('./pretrained_weights', 'quantized_cnn_weights_preprocessed.txt')
         else: # Lab 11
-            model_path = os.path.join('./pretrained_weights', 'cnn_weights.txt')
+            print('[!] This project requires quantization')
+            return
         net = CNN(model_path, args)
     else:
         raise

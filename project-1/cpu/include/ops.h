@@ -19,7 +19,7 @@ struct Op
 struct MatVecOp : Op
 {
   FPGA *dev_;
-  const float *weights_;
+  const int8_t *weights_;
   const float *bias_;
   int input_size_;
   int output_size_;
@@ -29,10 +29,10 @@ struct MatVecOp : Op
   int weight_bits_;
   float weight_min_, weight_max_;
 
-  MatVecOp(FPGA *dev, const float *weights, const float *bias, int input_size, int output_size)
+  MatVecOp(FPGA *dev, const int8_t *weights, const float *bias, int input_size, int output_size)
       : dev_(dev), weights_(weights), bias_(bias), input_size_(input_size), output_size_(output_size),
         quantized_(false), act_bits_(32), weight_bits_(32) {}
-  MatVecOp(FPGA *dev, const float *weights, const float *bias, int input_size, int output_size, bool quantized, int act_bits, float act_min, float act_max, int weight_bits, float weight_min, float weight_max)
+  MatVecOp(FPGA *dev, const int8_t *weights, const float *bias, int input_size, int output_size, bool quantized, int act_bits, float act_min, float act_max, int weight_bits, float weight_min, float weight_max)
       : dev_(dev), weights_(weights), bias_(bias), input_size_(input_size), output_size_(output_size),
         quantized_(quantized),
         act_bits_(act_bits), act_min_(act_min), act_max_(act_max),
@@ -56,7 +56,7 @@ struct MatVecOp : Op
 struct ConvOp : Op
 {
   FPGA *dev_;
-  const vector<vector<vector<vector<float>>>> raw_weights_;
+  const vector<vector<vector<vector<int8_t>>>> raw_weights_;
   int input_size_;
   int output_size_;
   int input_channel_, input_height_, input_width_;
@@ -67,7 +67,7 @@ struct ConvOp : Op
   int weight_bits_;
   float weight_min_, weight_max_;
 
-  ConvOp(FPGA *dev, vector<vector<vector<vector<float>>>> raw_weights,
+  ConvOp(FPGA *dev, vector<vector<vector<vector<int8_t>>>> raw_weights,
         int input_size, int output_size, int input_channel, int input_height, int input_width,
         int conv_channel, int conv_height, int conv_width)
       : dev_(dev), raw_weights_(raw_weights), input_size_(input_size), output_size_(output_size),
@@ -75,7 +75,7 @@ struct ConvOp : Op
         conv_channel_(conv_channel), conv_height_(conv_height), conv_width_(conv_width),
         quantized_(false), act_bits_(32), weight_bits_(32) {}
 
-  ConvOp(FPGA *dev, vector<vector<vector<vector<float>>>> raw_weights,
+  ConvOp(FPGA *dev, vector<vector<vector<vector<int8_t>>>> raw_weights,
         int input_size, int output_size, int input_channel, int input_height, int input_width,
         int conv_channel, int conv_height, int conv_width,
         bool quantized,
@@ -99,7 +99,7 @@ struct ConvOp : Op
 
   void run(const float *src, float *dst)
   {
-    vector<vector<float>> new_weights_(conv_channel_, vector<float>(conv_height_ * conv_width_ * input_channel_));
+    vector<vector<int8_t>> new_weights_(conv_channel_, vector<int8_t>(conv_height_ * conv_width_ * input_channel_));
     vector<vector<vector<float>>> src_(input_channel_, vector<vector<float>>(input_height_, vector<float>(input_width_)));
     vector<vector<float>> new_src_(new_weights_[0].size(), vector<float>((input_height_ - conv_height_ + 1) * (input_width_ - conv_width_ + 1)));
 
@@ -111,7 +111,7 @@ struct ConvOp : Op
 
     dev_->convLowering(raw_weights_, new_weights_, src_, new_src_);
 
-    float *weights_ = vectorToArray(new_weights_);
+    int8_t *weights_ = vectorToArray(new_weights_);
     for (int i = 0; i < new_src_[0].size(); i++)
     {
       vector<float> vec_src(new_src_.size());

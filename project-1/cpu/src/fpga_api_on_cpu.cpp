@@ -19,7 +19,7 @@ FPGA::FPGA(off_t data_addr, off_t output_addr, int m_size, int v_size)
   qout_ = new int32_t[m_size_];
 
   output_ = new unsigned int[m_size_]; // use output_ as tempolar output
-  data_ = new float[data_size_];
+  data_ = new float[v_size_];
 
   num_block_call_ = 0;
 }
@@ -31,11 +31,6 @@ FPGA::~FPGA()
   delete[] qvec_;
   delete[] qmat_;
   delete[] qout_;
-}
-
-float *FPGA::matrix(void)
-{
-  return data_ + v_size_;
 }
 
 float *FPGA::vector(void)
@@ -76,10 +71,8 @@ const float *FPGA::blockMV(Compute* comp)
 
   // cpu version
   float *vec = this->vector();
-  float *mat = this->matrix();
   float *out = reinterpret_cast<float *>(output_);
 
-  if(comp->quantized)
   {
     // NOTE: We'll ignore comp->act_bits and comp->weight_bits variable and
     // always quantize into 8bit signed integer
@@ -88,7 +81,6 @@ const float *FPGA::blockMV(Compute* comp)
     float weight_scale = (comp->weight_max - comp->weight_min)/127.0f;
 
     quantize(vec, qvec_, v_size_, act_scale);
-    quantize(mat, qmat_, m_size_*v_size_, weight_scale);
 
     for (int i = 0; i < m_size_; ++i)
     {
@@ -101,15 +93,6 @@ const float *FPGA::blockMV(Compute* comp)
 
     dequantize(qout_, out, m_size_, act_scale*weight_scale);
   }
-  else
-  {
-    for (int i = 0; i < m_size_; ++i)
-    {
-      out[i] = 0;
-      for (int j = 0; j < v_size_; ++j)
-        out[i] += vec[j] * mat[v_size_ * i + j];
-    }
-  }
 
   for (int i = 0; i < m_size_; ++i)
     data_[i] = out[i];
@@ -117,10 +100,9 @@ const float *FPGA::blockMV(Compute* comp)
   return data_;
 }
 
-void FPGA::largeMV(const float *large_mat, const float *input, float *output, int num_input, int num_output, Compute* comp)
+void FPGA::largeMV(const int8_t *large_mat, const float *input, float *output, int num_input, int num_output, Compute* comp)
 {
   float *vec = this->vector();
-  float *mat = this->matrix();
 
   // 0) Initialize output vector
   for (int i = 0; i < num_output; ++i)
@@ -144,15 +126,15 @@ void FPGA::largeMV(const float *large_mat, const float *input, float *output, in
       for (; row < block_row; ++row) {
         int col = 0;
         for (; col < block_col; ++col) {
-          mat[v_size_*row + col] = large_mat[num_input*(i + row) + j + col];
+          qmat_[v_size_*row + col] = large_mat[num_input*(i + row) + j + col];
         }
         for (; col < v_size_; ++col) {
-          mat[v_size_*row + col] = 0;
+          qmat_[v_size_*row + col] = 0;
         }
       }
       for (; row < m_size_; ++row) {
         for (int col = 0; col < v_size_; ++col) {
-          mat[v_size_*row + col] = 0;
+          qmat_[v_size_*row + col] = 0;
         }
       }
 
@@ -166,8 +148,8 @@ void FPGA::largeMV(const float *large_mat, const float *input, float *output, in
   }
 }
 
-void FPGA::convLowering(const std::vector<std::vector<std::vector<std::vector<float>>>> &cnn_weights,
-                        std::vector<std::vector<float>> &new_weights,
+void FPGA::convLowering(const std::vector<std::vector<std::vector<std::vector<int8_t>>>> &cnn_weights,
+                        std::vector<std::vector<int8_t>> &new_weights,
                         const std::vector<std::vector<std::vector<float>>> &inputs,
                         std::vector<std::vector<float>> &new_inputs)
 {

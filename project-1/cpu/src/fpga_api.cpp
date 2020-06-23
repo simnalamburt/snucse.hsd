@@ -76,14 +76,15 @@ const int16_t *FPGA::qblockMV(Compute* comp)
   return reinterpret_cast<int16_t *>(qdata_);
 }
 
-void FPGA::largeMV(const float *large_mat, const float *input, float *output, int num_input, int num_output, Compute* comp)
+void FPGA::largeMV(const int8_t *large_mat, const float *input, float *output, int num_input, int num_output, Compute* comp)
 {
+  // TODO: large_mat is quantized already
   // TODO: Profiling and optimization
 
   int8_t *qvec = this->qvector();
   int8_t *qmat = this->qmatrix();
 
-  int8_t *qlarge_mat = new int8_t[num_input*num_output];
+  const int8_t *qlarge_mat = large_mat;
   int8_t *qinput = new int8_t[num_input];
   int32_t *qoutput = new int32_t[num_output];
 
@@ -94,7 +95,6 @@ void FPGA::largeMV(const float *large_mat, const float *input, float *output, in
   float weight_scale = (comp->weight_max - comp->weight_min)/127.0f;
 
   quantize(input, qinput, num_input, act_scale);
-  quantize(large_mat, qlarge_mat, num_input*num_output, weight_scale);
 
   // 0) Initialize output vector
   for (int i = 0; i < num_output; ++i)
@@ -141,13 +141,12 @@ void FPGA::largeMV(const float *large_mat, const float *input, float *output, in
 
   dequantize(qoutput, output, num_output, act_scale*weight_scale);
 
-  delete[] qlarge_mat;
   delete[] qinput;
   delete[] qoutput;
 }
 
-void FPGA::convLowering(const std::vector<std::vector<std::vector<std::vector<float>>>> &cnn_weights,
-                        std::vector<std::vector<float>> &new_weights,
+void FPGA::convLowering(const std::vector<std::vector<std::vector<std::vector<int8_t>>>> &cnn_weights,
+                        std::vector<std::vector<int8_t>> &new_weights,
                         const std::vector<std::vector<std::vector<float>>> &inputs,
                         std::vector<std::vector<float>> &new_inputs)
 {

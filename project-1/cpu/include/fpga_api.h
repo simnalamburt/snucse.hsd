@@ -31,7 +31,6 @@ public:
   ~FPGA();
 
   // return internal pointer for the data
-  float *matrix(void);
   float *vector(void);
   int8_t *qmatrix(void);
   int8_t *qvector(void);
@@ -46,9 +45,9 @@ public:
   // Matrix size: num_output * num_input
   // Output vector size: num_output
   // O = M * I
-  void largeMV(const float *mat, const float *input, float *output, int num_input, int num_output, Compute* comp);
-  void convLowering(const std::vector<std::vector<std::vector<std::vector<float>>>> &cnn_weights,
-                    std::vector<std::vector<float>> &new_weights,
+  void largeMV(const int8_t *mat, const float *input, float *output, int num_input, int num_output, Compute* comp);
+  void convLowering(const std::vector<std::vector<std::vector<std::vector<int8_t>>>> &cnn_weights,
+                    std::vector<std::vector<int8_t>> &new_weights,
                     const std::vector<std::vector<std::vector<float>>> &inputs,
                     std::vector<std::vector<float>> &new_inputs);
 };
