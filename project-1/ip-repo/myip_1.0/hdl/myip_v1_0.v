@@ -1,7 +1,7 @@
 `timescale 1 ns / 1 ps
 
 module myip_v1_0 #(
-    // TODO: Users to add parameters here
+    // NOTE: Users to add parameters here
     parameter integer C_M00_BRAM_ADDR_WIDTH = 32,
     parameter integer C_M00_BRAM_DATA_WIDTH = 32,
     parameter integer C_M00_BRAM_WE_WIDTH = 4,
@@ -12,7 +12,7 @@ module myip_v1_0 #(
     parameter integer C_S00_AXI_DATA_WIDTH = 32,
     parameter integer C_S00_AXI_ADDR_WIDTH = 4
 ) (
-    // TODO: Users to add ports here
+    // NOTE: Users to add ports here
     output wire [C_M00_BRAM_ADDR_WIDTH-1:0] m00_bram_addr,
     output wire m00_bram_clk,
     output wire [C_M00_BRAM_DATA_WIDTH-1:0] m00_bram_wrdata,
@@ -84,7 +84,5 @@ module myip_v1_0 #(
         .S_AXI_RREADY(s00_axi_rready)
     );
 
-    // TODO: Add user logic here
-
-    // User logic ends
+    // NOTE: Add user logic here
 endmodule

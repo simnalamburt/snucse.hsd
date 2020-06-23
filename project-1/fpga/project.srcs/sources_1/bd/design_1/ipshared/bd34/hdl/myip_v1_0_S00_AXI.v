@@ -1,7 +1,7 @@
 `timescale 1 ns / 1 ps
 
 module myip_v1_0_S00_AXI #(
-    // TODO: Users to add parameters here
+    // NOTE: Users to add parameters here
     parameter integer BRAM_ADDR_WIDTH = 32,
     parameter integer BRAM_DATA_WIDTH = 32,
     parameter integer BRAM_WE_WIDTH = 4,
@@ -13,7 +13,7 @@ module myip_v1_0_S00_AXI #(
     // Width of S_AXI address bus
     parameter integer C_S_AXI_ADDR_WIDTH = 4
 ) (
-    // TODO: Users to add ports here
+    // NOTE: Users to add ports here
     output wire [BRAM_ADDR_WIDTH-1:0] BRAM_ADDR,
     output wire BRAM_CLK,
     output wire [BRAM_DATA_WIDTH-1:0] BRAM_WRDATA,
@@ -197,9 +197,8 @@ module myip_v1_0_S00_AXI #(
     always @( posedge S_AXI_ACLK ) begin
         if ( S_AXI_ARESETN == 1'b0 || run_complete) begin
             slv_reg0 <= 0;
-            // TODO: Enable me
-            //slv_reg1 <= 0;
-            //slv_reg2 <= 0;
+            slv_reg1 <= 0;
+            slv_reg2 <= 0;
             slv_reg3 <= 0;
         end else begin
             if (slv_reg_wren) begin
@@ -214,24 +213,22 @@ module myip_v1_0_S00_AXI #(
                         end
                     end
                     2'h1: begin
-                        // TODO: Enable me
-                        //for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 ) begin
-                        //    if ( S_AXI_WSTRB[byte_index] == 1 ) begin
-                        //        // Respective byte enables are asserted as per write strobes
-                        //        // Slave register 1
-                        //        slv_reg1[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
-                        //    end
-                        //end
+                        for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 ) begin
+                            if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+                                // Respective byte enables are asserted as per write strobes
+                                // Slave register 1
+                                slv_reg1[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+                            end
+                        end
                     end
                     2'h2: begin
-                        // TODO: Enable me
-                        //for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 ) begin
-                        //    if ( S_AXI_WSTRB[byte_index] == 1 ) begin
-                        //        // Respective byte enables are asserted as per write strobes
-                        //        // Slave register 2
-                        //        slv_reg2[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
-                        //    end
-                        //end
+                        for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 ) begin
+                            if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+                                // Respective byte enables are asserted as per write strobes
+                                // Slave register 2
+                                slv_reg2[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+                            end
+                        end
                     end
                     2'h3: begin
                         for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 ) begin
@@ -244,9 +241,8 @@ module myip_v1_0_S00_AXI #(
                     end
                     default: begin
                         slv_reg0 <= slv_reg0;
-                        // TODO: Enable me
-                        //slv_reg1 <= slv_reg1;
-                        //slv_reg2 <= slv_reg2;
+                        slv_reg1 <= slv_reg1;
+                        slv_reg2 <= slv_reg2;
                         slv_reg3 <= slv_reg3;
                     end
                 endcase
@@ -363,7 +359,7 @@ module myip_v1_0_S00_AXI #(
     //
     localparam LOG2_DIM = 6;
     localparam DIM = 1<<LOG2_DIM;
-    localparam ZERO_CTR = 13'b0;
+    localparam ZERO_CTR = {(LOG2_DIM*2+1){1'b0}};
 
     //
     // Inputs
@@ -381,11 +377,8 @@ module myip_v1_0_S00_AXI #(
     localparam S_DONE       = 3'd4;
 
     reg [2:0] state;
-    // TODO: counter의 0 비트가 무조건 0임, 아끼기
+    // TODO: counter가 필요한것보다 큰 비트를 갖고있음
     reg [LOG2_DIM*2:0] counter;
-    wire [LOG2_DIM*2:0] read_counter = counter - 2;
-    wire [LOG2_DIM-1:0] read_col = read_counter[LOG2_DIM-1:0];
-    wire [LOG2_DIM-1:0] read_row = read_counter[LOG2_DIM*2-1:LOG2_DIM];
 
     wire [LOG2_DIM*2 + 3:0] next_ = next(state, counter, S_AXI_ARESETN, start);
     wire [2:0] next_state = next_[2:0];
@@ -408,22 +401,22 @@ module myip_v1_0_S00_AXI #(
                     end
                 end
                 S_LOAD_V: begin
-                    if (counter < DIM + 2 - 1) begin
-                        next = {counter + 4, S_LOAD_V};
+                    if (counter < DIM/4 + 2 - 1) begin
+                        next = {counter + 1, S_LOAD_V};
                     end else begin
                         next = {ZERO_CTR, S_READ_M};
                     end
                 end
                 S_READ_M: begin
-                    if (counter < DIM*DIM + 2 - 1) begin
-                        next = {counter + 4, S_READ_M};
+                    if (counter < DIM*DIM/4 + 2 - 1) begin
+                        next = {counter + 1, S_READ_M};
                     end else begin
                         next = {ZERO_CTR, S_STORE};
                     end
                 end
                 S_STORE: begin
-                    if (counter < DIM - 1) begin
-                        next = {counter + 2, S_STORE};
+                    if (counter < DIM/2 - 1) begin
+                        next = {counter + 1, S_STORE};
                     end else begin
                         next = {ZERO_CTR, S_DONE};
                     end
@@ -447,20 +440,26 @@ module myip_v1_0_S00_AXI #(
     //
     // Memory
     //
-    reg [7:0] vector[0:DIM - 1];
-    reg [15:0] result[0:DIM - 1];
+    reg signed [7:0] vector[0:DIM - 1];
+    reg signed [15:0] result[0:DIM - 1];
 
     //
     // Outputs
     //
     reg bram_en;
+    reg [BRAM_WE_WIDTH-1:0] bram_we;
     reg [BRAM_ADDR_WIDTH-1:0] bram_addr, bram_wrdata;
     assign run_complete = state == S_DONE;
     assign BRAM_EN = bram_en;
     assign BRAM_RST = 1'b0;
-    assign BRAM_WE = state == S_STORE ? 4'b1111 : 4'b0000;
+    assign BRAM_WE = bram_we;
     assign BRAM_ADDR = bram_addr;
     assign BRAM_WRDATA = bram_wrdata;
+
+    // Arithmetic operation helper
+    reg [LOG2_DIM*2:0] read_addr;
+    reg [LOG2_DIM-1:0] read_col, read_row;
+    reg signed [7:0] t0, t1, t2, t3;
 
     //
     // At rising edge
@@ -469,50 +468,69 @@ module myip_v1_0_S00_AXI #(
         // Advance state
         state = next_state;
         counter = next_counter;
-        // TODO: debug
-        slv_reg1 = state;
-        slv_reg2 = counter;
 
-        // TODO: Change to combinational logic
         bram_en = 0;
+        bram_we = 4'b0000;
         bram_addr = 0;
         bram_wrdata = 0;
         case (state)
             S_LOAD_V: begin
-                if (counter < DIM) begin
+                if (counter < DIM/4) begin
                     // Read vector
                     bram_en = 1;
-                    bram_addr = counter << 2;
+                    bram_addr = counter*4;
                 end
                 if (counter >= 2) begin
                     // Delayed vector read result
-                    vector[read_counter + 0] = BRAM_RDDATA[ 7: 0];
-                    vector[read_counter + 1] = BRAM_RDDATA[15: 8];
-                    vector[read_counter + 3] = BRAM_RDDATA[23:16];
-                    vector[read_counter + 4] = BRAM_RDDATA[31:24];
+
+                    // Setup variables
+                    read_addr = (counter - 2) << 2;
+
+                    // Store vector
+                    vector[read_addr + 0] = BRAM_RDDATA[ 7: 0];
+                    vector[read_addr + 1] = BRAM_RDDATA[15: 8];
+                    vector[read_addr + 2] = BRAM_RDDATA[23:16];
+                    vector[read_addr + 3] = BRAM_RDDATA[31:24];
+                    // Initialize result array
+                    result[read_addr + 0] = 0;
+                    result[read_addr + 1] = 0;
+                    result[read_addr + 2] = 0;
+                    result[read_addr + 3] = 0;
                 end
             end
             S_READ_M: begin
-                if (counter < DIM*DIM) begin
+                if (counter < DIM*DIM/4) begin
                     // Read matrix
                     bram_en = 1;
-                    bram_addr = (DIM + counter) << 2;
+                    bram_addr = DIM + counter*4;
                 end
                 if (counter >= 2) begin
                     // Delayed matrix read result
+
+                    // Setup variables
+                    read_addr = (counter - 2) << 2;
+                    read_col = read_addr[LOG2_DIM-1:0];
+                    read_row = read_addr[LOG2_DIM*2-1:LOG2_DIM];
+                    t0 = BRAM_RDDATA[ 7: 0];
+                    t1 = BRAM_RDDATA[15: 8];
+                    t2 = BRAM_RDDATA[23:16];
+                    t3 = BRAM_RDDATA[31:24];
+
+                    // Signed 8bit int multiply-accumulate
                     result[read_row] = result[read_row] +
-                        vector[read_col + 0] * BRAM_RDDATA[ 7: 0] +
-                        vector[read_col + 1] * BRAM_RDDATA[15: 8] +
-                        vector[read_col + 3] * BRAM_RDDATA[23:16] +
-                        vector[read_col + 4] * BRAM_RDDATA[31:24];
+                        vector[read_col + 0] * t0 +
+                        vector[read_col + 1] * t1 +
+                        vector[read_col + 2] * t2 +
+                        vector[read_col + 3] * t3;
                 end
             end
             S_STORE: begin
                 // Store the calculation output
                 // `BRAM_WE` is 4'b1111 in here
                 bram_en = 1;
+                bram_we = 4'b1111;
                 bram_addr = counter << 2;
-                bram_wrdata = {result[counter + 1], result[counter]};
+                bram_wrdata = {result[2*counter + 1], result[2*counter]};
             end
         endcase
     end
