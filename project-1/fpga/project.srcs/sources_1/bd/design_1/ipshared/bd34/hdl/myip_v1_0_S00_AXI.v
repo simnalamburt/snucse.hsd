@@ -357,7 +357,7 @@ module myip_v1_0_S00_AXI #(
     //
     // User logic
     //
-    localparam LOG2_DIM = 7;
+    localparam LOG2_DIM = 6;
     localparam DIM = 1<<LOG2_DIM;
     localparam ZERO_CTR = {(LOG2_DIM*2+1){1'b0}};
 
